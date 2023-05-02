@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<!-- <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/eventemitter2@6/lib/eventemitter2.min.js"></script>
+<script src="./roslib.js"></script>
+
+<style>
+    button {height:  200px;
+            width: 200px;
+            font-size: 25px;
+            }
+    
+</style>
+
+<script type="text/javascript" type="text/javascript">
+  var ros = new ROSLIB.Ros({
+    url : 'ws://localhost:9090'
+  });
+
+  ros.on('connection', function() {
+    document.getElementById("status").innerHTML = "Connected";
+  });
+
+  ros.on('error', function(error) {
+    document.getElementById("status").innerHTML = "Error";
+  });
+
+  ros.on('close', function() {
+    document.getElementById("status").innerHTML = "Closed";
+  });
+ 
+
+
+  var cmdVelTopic= new ROSLIB.Topic({
+    ros : ros,
+    // name : '/stretch/cmd_vel',
+    name : '/stretch_diff_drive_controller/cmd_vel',
+    messagType : 'geometry_msgs/Twist'
+  });
+
+  var trajectoryClient = new ROSLIB.ActionClient({
+    ros : ros,
+    // serverName : '/stretch_controller/follow_joint_trajectory',
+    serverName : 'follow_joint_trajectory_raw/follow_joint_trajectory',
+    // serverName : '/stretch_head_controller/follow_joint_trajectory',
+    actionName : 'control_msgs/FollowJointTrajectoryAction'
+  });
+
+  function generatePoseGoal(pose){
+
+    var outStr = '{'
+    
+    console.log('in gneeratePoseGoal');	
+    console.log('newGoal created =' + pose.key+ pose)
+    var jointNames = []
+    var jointPositions = []
+    for (var key in pose) {
+      jointNames.push(key)
+      jointPositions.push(pose[key])
+      console.log('newGoal created =' + key + pose[key])
+    }
+    var newGoal = new ROSLIB.Goal({
+    actionClient : trajectoryClient,
+    goalMessage : {
+      trajectory : {
+    joint_names : jointNames,
+    points : [
+        {
+          positions : jointPositions
+        }
+    ]
+      }
+    }
+    })
+
+    // newGoal.on('feedback', function(feedback) {
+    // 	console.log('Feedback: ' + feedback.sequence);
+    // });
+
+    // newGoal.on('result', function(result) {
+    // 	console.log('Final Result: ' + result.sequence);
+    // });
+    newGoal.send()
+  }  
+
+  var velocity = {
+    linear_x: 0,
+    linear_y: 0,
+    linear_z: 0,
+    angular_x: 0,
+    angular_y: 0,
+    angular_z: 0
+  };
+
+  cmdVelTopic.subscribe(function(message) {
+    velocity.linear_x= message.linear.x;
+    velocity.linear_y= message.linear.y;
+    velocity.linear_z= message.linear.z;
+    velocity.angular_x = message.angular.x;
+    velocity.angular_y = message.angular.y;
+    velocity.angular_z = message.angular.z;
+  })
+
+  function updateVelocty() {
+    document.getElementById('linear_x').innerHTML = 'Linear Velocity X ' + velocity.linear_x;
+    document.getElementById('linear_y').innerHTML = 'Linear Velocity Y ' + velocity.linear_y;
+    document.getElementById('linear_z').innerHTML = 'Linear Velocity Z ' + velocity.linear_z;
+    document.getElementById('angular_x').innerHTML = 'Angular Velocity X ' + velocity.angular_x;
+    document.getElementById('angular_y').innerHTML = 'Angular Velocity Y ' + velocity.angular_y;
+    document.getElementById('angular_z').innerHTML = 'Angular Velocity Z ' + velocity.angular_z;
+  }
+  setInterval(updateVelocty,100);
+
+  move = function (linear_x, angular) {
+    console.log("in move")
+    var twist = new ROSLIB.Message({
+      linear: {
+        x: linear_x,
+        y: 0,
+        z: 0
+      },
+      angular: {
+        x: 0,
+        y: 0,
+        z: angular
+      }
+    });
+    cmdVelTopic.publish(twist);
+  }
+
+  jointGoal = function () {
+    var twist = new ROSLIB.Message({
+
+    })
+  }
+
+</script>
+</head>
+
+<body>
+  <h1>Colostomy Care Robot Controller User Interface</h1>
+  <p>Connection status: <span id="status"></span></p>
+
+  <table>
+    <tr>
+      <th><button id="forwardButton" onclick="move(1,1)">Forward left</button></th>
+      <th><button id="forwardButton" onclick="move(1,0)">Forward</button></th>
+      <th><button id="forwardButton" onclick="move(1,-1)">Forward right</button></th>
+    </tr>
+    <tr>
+      <td><button id="LeftButton" onclick="move(0,1)">Left</button></td>
+      <td></td>
+      <td><button id="RightButton" onclick="move(0,-1)">Right</button></td>
+    </tr>
+    <tr>
+      <td><button id="backwardButton" onclick="move(-1,-1)">Backward Left</button></td>
+      <td> <button id="backwardButton" onclick="move(-1,0)">Backward</button></td>
+      <td><button id="backwardButton" onclick="move(-1,1)">Backward Right</button></td>
+      <td><button id="backwardButton" onclick="generatePoseGoal({'translate_mobile_base': 0.1})">test Forward</button></td>
+      <td><button id="backwardButton" onclick="generatePoseGoal({'translate_mobile_base': -0.1})">test back</button></td>
+      <td><button id="backwardButton" onclick="generatePoseGoal({'joint_arm_l1': 0.1})">Test Lift up</button></td>
+    </tr>
+  </table> 
+  <p id="linear_x">
+  <p id="linear_y">
+  <p id="linear_z">
+  <p id="angular_x">
+  <p id="angular_y">
+  <p id="angular_z">
+</body>
+</html>
