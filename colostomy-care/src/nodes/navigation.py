@@ -4,6 +4,7 @@ import rospy
 from move_base_msgs.msg import MoveBaseActionGoal
 from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
 from std_msgs.msg import Empty, String
+
 """
 Navigation Node
     + Based on the user's singnal, start navigation of robot to the desired location
@@ -19,6 +20,7 @@ Navigation Node
     + navigate_to_initial
         - return to the inital position
 """
+
 class NavigationNode:
     def __init__(self):
         rospy.init_node('navigation_node')
@@ -31,7 +33,7 @@ class NavigationNode:
         rospy.Subscriber('/start_navigation_to_patient', Empty, self.start_navigation_patient_callback)
         rospy.Subscriber('/start_navigation_to_bin', Empty, self.start_navigation_bin_callback)
         rospy.Subscriber('/start_navigation_to_initial', Empty, self.start_navigation_initial_callback)
-        
+
         # Set the rate at which to publish messages (adjust as needed)
         self.rate = rospy.Rate(1)
 
@@ -40,9 +42,9 @@ class NavigationNode:
         initial_pose = PoseWithCovarianceStamped()
 
         # Set the position and orientation values
-        initial_pose.position.x = 1.1394891066611121
-        initial_pose.position.y = -2.8552935343172003
-        initial_pose.orientation.z = 0.707
+        initial_pose.pose.pose.position.x = 1.1394891066611121
+        initial_pose.pose.pose.position.y = -2.8552935343172003
+        initial_pose.pose.pose.orientation.z = 0.707
         self.initialpose_pub.publish(initial_pose)
         rospy.sleep(1)  # Wait for the message to be published
 
@@ -61,18 +63,23 @@ class NavigationNode:
         self.movebase_goal_pub.publish(movebase_goal)
 
     def navigate_to_bin(self):
+        print("Navigating to bin")
         # Send /move_base/goal as the goal location & orientation
         goal_pose = PoseStamped()
         # Set the goal pose details
-        # ...
+        goal_pose.header.stamp = rospy.Time.now()
+        goal_pose.header.frame_id = 'map'
+        goal_pose.pose.position.x = 2.14
+        goal_pose.pose.position.y = 3.58
+        goal_pose.pose.orientation.z = 0.707
 
         movebase_goal = MoveBaseActionGoal()
         movebase_goal.header.stamp = rospy.Time.now()
         movebase_goal.header.frame_id = ''
-        movebase_goal.goal = goal_pose
+        movebase_goal.goal.target_pose = goal_pose
 
         self.movebase_goal_pub.publish(movebase_goal)
-
+        print("Done publishing to navigate")
         # Send signal to saved-poses to perform throwing away
         signal = "throw"
         self.throwing_signal_pub.publish(signal)
@@ -86,14 +93,14 @@ class NavigationNode:
         movebase_goal = MoveBaseActionGoal()
         movebase_goal.header.stamp = rospy.Time.now()
         movebase_goal.header.frame_id = ''
-        movebase_goal.goal = initial_pose
+        movebase_goal.goal.target_pose = initial_pose
 
         self.movebase_goal_pub.publish(movebase_goal)
     
     def start_navigation_patient_callback(self, msg):
         self.navigate_to_patient()
 
-    def start_navigation__bin_callback(self, msg):
+    def start_navigation_bin_callback(self, msg):
         self.navigate_to_bin()
 
     def start_navigation_initial_callback(self, msg):
