@@ -2,7 +2,8 @@
 
 import rospy
 from move_base_msgs.msg import MoveBaseActionGoal
-from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped, String
+from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
+from std_msgs.msg import Empty, String
 """
 Navigation Node
     + Based on the user's singnal, start navigation of robot to the desired location
@@ -27,6 +28,10 @@ class NavigationNode:
         self.movebase_goal_pub = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=10)
         self.throwing_signal_pub = rospy.Publisher('/throwing_signal', String, queue_size=10)
 
+        rospy.Subscriber('/start_navigation_to_patient', Empty, self.start_navigation_patient_callback)
+        rospy.Subscriber('/start_navigation_to_bin', Empty, self.start_navigation_bin_callback)
+        rospy.Subscriber('/start_navigation_to_initial', Empty, self.start_navigation_initial_callback)
+        
         # Set the rate at which to publish messages (adjust as needed)
         self.rate = rospy.Rate(1)
 
@@ -84,6 +89,15 @@ class NavigationNode:
         movebase_goal.goal = initial_pose
 
         self.movebase_goal_pub.publish(movebase_goal)
+    
+    def start_navigation_patient_callback(self, msg):
+        self.navigate_to_patient()
+
+    def start_navigation__bin_callback(self, msg):
+        self.navigate_to_bin()
+
+    def start_navigation_initial_callback(self, msg):
+        self.navigate_to_initial()
 
     def run(self):
         while not rospy.is_shutdown():
