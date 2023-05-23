@@ -86,14 +86,19 @@ class NavigationNode:
 
     def navigate_to_initial(self):
         # Return to the initial position
-        initial_pose = PoseStamped()
+        goal_pose= PoseStamped()
         # Set the initial pose details
-        # ...
+
+        # Set the goal pose details
+        goal_pose.pose.position.x = 1.1394891066611121
+        goal_pose.pose.position.y = -2.8552935343172003
+        goal_pose.pose.orientation.z = 0.707
+
 
         movebase_goal = MoveBaseActionGoal()
         movebase_goal.header.stamp = rospy.Time.now()
         movebase_goal.header.frame_id = ''
-        movebase_goal.goal.target_pose = initial_pose
+        movebase_goal.goal.target_pose = goal_pose
 
         self.movebase_goal_pub.publish(movebase_goal)
     

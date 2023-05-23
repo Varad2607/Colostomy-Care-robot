@@ -15,19 +15,25 @@
     
 </style>
 
+<!-- Start JavaScript code -->
 <script type="text/javascript" type="text/javascript">
+   // Create a new ROS instance and connect to the server
   var ros = new ROSLIB.Ros({
     url : 'ws://localhost:9090'
   });
 
+
+  // Event handler for successful connection
   ros.on('connection', function() {
     document.getElementById("status").innerHTML = "Connected";
   });
 
+
+  // Event handler for connection errors
   ros.on('error', function(error) {
     document.getElementById("status").innerHTML = "Error";
   });
-
+   // Event handler for connection closure
   ros.on('close', function() {
     document.getElementById("status").innerHTML = "Closed";
   });
@@ -78,33 +84,33 @@
     newGoal.send()
   }  
 
-  var velocity = {
-    linear_x: 0,
-    linear_y: 0,
-    linear_z: 0,
-    angular_x: 0,
-    angular_y: 0,
-    angular_z: 0
-  };
+  // var velocity = {
+  //   linear_x: 0,
+  //   linear_y: 0,
+  //   linear_z: 0,
+  //   angular_x: 0,
+  //   angular_y: 0,
+  //   angular_z: 0
+  // };
 
-  cmdVelTopic.subscribe(function(message) {
-    velocity.linear_x= message.linear.x;
-    velocity.linear_y= message.linear.y;
-    velocity.linear_z= message.linear.z;
-    velocity.angular_x = message.angular.x;
-    velocity.angular_y = message.angular.y;
-    velocity.angular_z = message.angular.z;
-  })
+  // cmdVelTopic.subscribe(function(message) {
+  //   velocity.linear_x= message.linear.x;
+  //   velocity.linear_y= message.linear.y;
+  //   velocity.linear_z= message.linear.z;
+  //   velocity.angular_x = message.angular.x;
+  //   velocity.angular_y = message.angular.y;
+  //   velocity.angular_z = message.angular.z;
+  // })
 
-  function updateVelocty() {
-    document.getElementById('linear_x').innerHTML = 'Linear Velocity X ' + velocity.linear_x;
-    document.getElementById('linear_y').innerHTML = 'Linear Velocity Y ' + velocity.linear_y;
-    document.getElementById('linear_z').innerHTML = 'Linear Velocity Z ' + velocity.linear_z;
-    document.getElementById('angular_x').innerHTML = 'Angular Velocity X ' + velocity.angular_x;
-    document.getElementById('angular_y').innerHTML = 'Angular Velocity Y ' + velocity.angular_y;
-    document.getElementById('angular_z').innerHTML = 'Angular Velocity Z ' + velocity.angular_z;
-  }
-  setInterval(updateVelocty,100);
+  // function updateVelocty() {
+  //   document.getElementById('linear_x').innerHTML = 'Linear Velocity X ' + velocity.linear_x;
+  //   document.getElementById('linear_y').innerHTML = 'Linear Velocity Y ' + velocity.linear_y;
+  //   document.getElementById('linear_z').innerHTML = 'Linear Velocity Z ' + velocity.linear_z;
+  //   document.getElementById('angular_x').innerHTML = 'Angular Velocity X ' + velocity.angular_x;
+  //   document.getElementById('angular_y').innerHTML = 'Angular Velocity Y ' + velocity.angular_y;
+  //   document.getElementById('angular_z').innerHTML = 'Angular Velocity Z ' + velocity.angular_z;
+  // }
+  // setInterval(updateVelocty,100);
 
   move = function (linear_x, angular) {
     console.log("in move")
@@ -167,12 +173,12 @@
       <td><button id="backwardButton" onclick="generatePoseGoal({'translate_mobile_base': 0.02})">test Forward</button></td>
       <td><button id="backwardButton" onclick="generatePoseGoal({'joint_head_pan': 5})">Test Lift up</button></td> -->
     </tr>
-  </table> 
-  <p id="linear_x">
+  <!-- </table>  -->
+  <!-- <p id="linear_x">
   <p id="linear_y">
   <p id="linear_z">
   <p id="angular_x">
   <p id="angular_y">
-  <p id="angular_z">
+  <p id="angular_z"> -->
 </body>
 </html>

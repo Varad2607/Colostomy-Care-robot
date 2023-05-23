@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+
+<!-- Include the roslib.js library -->
+<!-- <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/eventemitter2@6/lib/eventemitter2.min.js"></script>
+<script src="./roslib.js"></script>
+
+<style>
+    button {height:  100px;
+            width: 200px;
+            font-size: 25px;
+            }
+    
+</style>
+
+<!-- Start JavaScript code -->
+
+<script type="text/javascript" type="text/javascript">
+
+    // Create a new ROS instance and connect to the server
+    var ros = new ROSLIB.Ros({
+      url : 'ws://localhost:9090'
+    });
+    
+     // Event handler for successful connection
+    ros.on('connection', function() {
+      document.getElementById("status").innerHTML = "Connected";
+    });
+
+     // Event handler for connection errors
+    ros.on('error', function(error) {
+      document.getElementById("status").innerHTML = "Error";
+    });
+    
+    // Event handler for connection closure
+    ros.on('close', function() {
+      document.getElementById("status").innerHTML = "Closed";
+    });
+
+
+    const emptyMsg=new ROSLIB.Message({});
+  
+  const navigateToBinTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/start_navigation_to_bin',
+    mesageType: 'std_msgs/Empty'
+  })
+  
+  const navigateToPatientTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/start_navigation_to_patient',
+    mesageType: 'std_msgs/Empty'
+  })
+
+  const navigateToInitialTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/start_navigation_to_patient',
+    mesageType: 'std_msgs/Empty'
+  })
+
+
+</script>
+</head>
+
+<body>
+  <h1>Colostomy Care Robot Controller User Interface</h1>
+  <p>Connection status: <span id="status"></span></p>
+
+  <table>
+    <tr>
+      <th><button onclick="navigateToBinTopic.publish(emptyMsg)">Start</button></th>
+      <th><button id="forwardButton" onclick="move(1,0)">Teleop Robot</button></th>
+
+    </tr>
+    <tr>
+      <td><button id="LeftButton" onclick="move(0,1)">Align Robot</button></td>
+      <td><button id="RightButton" onclick="move(0,-1)">Telop Robot</button></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><button id="backwardButton" onclick="move(-1,-1)">Grab the Bag</button></td>
+      </tr>
+    <tr>
+      <td><button id="backwardButton" onclick="move(-1,-1)">Remove the Bag</button></td>
+     </tr>
+    <tr>
+      <td><button id="backwardButton" onclick="move(-1,-1)">Throw the Bag</button></td>
+     </tr>
+
+</body>
+</html>

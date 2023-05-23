@@ -78,8 +78,7 @@ while True:
         w.pull_status()
         poses[pose_name] = (l.status['pos'], a.status['pos'], g.status['pos'], w.status['pos'])
         print(f"Position: {l.status['pos']}, {a.status['pos']}, {g.status['pos']}, {w.status['pos']}")
-    elif user_in == 'r':
-        for pose_name, pose_pos in poses.items():
+    elif user_in == 'r':for pose_name, pose_pos in poses.items():
             # Get the position values for the pose
             lift_pos, arm_pos, grip_pos, wrist_pos = pose_pos
             # Print the position values for the pose
@@ -104,4 +103,5 @@ while True:
             time.sleep(3)
             
 """
+        
 
