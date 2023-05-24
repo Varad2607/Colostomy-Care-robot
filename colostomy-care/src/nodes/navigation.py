@@ -44,17 +44,20 @@ class NavigationNode:
         # Set the position and orientation values
         initial_pose.pose.pose.position.x = 1.1394891066611121
         initial_pose.pose.pose.position.y = -2.8552935343172003
-        initial_pose.pose.pose.orientation.z = 0.707
+        initial_pose.pose.pose.orientation.z = 0.59
+        initial_pose.pose.pose.orientation.w = 0.895
+        print("Publishing initial post")
         self.initialpose_pub.publish(initial_pose)
         rospy.sleep(1)  # Wait for the message to be published
 
+        # move striaght forward
         # Send /move_base/goal as the goal location & orientation
         goal_pose = PoseStamped()
         # Set the goal pose details
-        goal_pose.pose.position.x = 0.174
-        goal_pose.pose.position.y = 4.27
+        goal_pose.pose.position.x = 2.83
+        goal_pose.pose.position.y = 3.44
         goal_pose.pose.orientation.z = 0.707
-
+        
         movebase_goal = MoveBaseActionGoal()
         movebase_goal.header.stamp = rospy.Time.now()
         movebase_goal.header.frame_id = ''
