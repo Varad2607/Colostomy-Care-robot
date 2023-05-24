@@ -23,7 +23,7 @@
 
     // Create a new ROS instance and connect to the server
     var ros = new ROSLIB.Ros({
-      url : 'ws://localhost:9090'
+      url : 'ws://172.28.7.121:9090'
     });
     
      // Event handler for successful connection
@@ -62,6 +62,12 @@
     mesageType: 'std_msgs/Empty'
   })
 
+  const stopNavigationTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/stop_navigation',
+    mesageType: 'std_msgs/Empty'
+  })
+
 
 </script>
 </head>
@@ -72,7 +78,7 @@
 
   <table>
     <tr>
-      <th><button onclick="navigateToBinTopic.publish(emptyMsg)">Start</button></th>
+      <th><button onclick="navigateToPatientTopic.publish(emptyMsg)">Start</button></th>
       <th><button id="forwardButton" onclick="move(1,0)">Teleop Robot</button></th>
 
     </tr>
@@ -85,11 +91,14 @@
       <td><button id="backwardButton" onclick="move(-1,-1)">Grab the Bag</button></td>
       </tr>
     <tr>
-      <td><button id="backwardButton" onclick="move(-1,-1)">Remove the Bag</button></td>
+      <td><button onclick="navigateToBinTopic.publish(emptyMsg)">Remove the Bag</button></td>
      </tr>
     <tr>
-      <td><button id="backwardButton" onclick="move(-1,-1)">Throw the Bag</button></td>
-     </tr>
+      <td><button onclick="navigateToInitialTopic.publish(emptyMsg)">Throw the Bag</button></td>
+    </tr>
+    <tr>
+      <td><button onclick="stopNavigationTopic .publish(emptyMsg)">Stop Navigation</button></td>
+    </tr>
 
 </body>
 </html>
