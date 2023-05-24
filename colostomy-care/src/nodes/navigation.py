@@ -66,12 +66,15 @@ class NavigationNode:
         print("Publishing initial post")
         self.initialpose_pub.publish(initial_pose)
         rospy.sleep(1)  # Wait for the message to be published
+        print("Navigating to patient")
         self.publishMoveBaseGoal(0.5521001815795898, 4.632573127746582, 0.9748691112372452, 0.22277840100760127)
 
     def navigate_to_bin(self):
+        print("Navigating to bin")
         self.publishMoveBaseGoal(2.9260339736938477, 4.150063991546631, -0.14516202694640776, 0.9894078966396066)
 
     def navigate_to_initial(self):
+        print("Navigating back to initial position")
         self.publishMoveBaseGoal(self.initial_pos_x, self.initial_pos_y, self.initial_ori_z, self.initial_ori_w)
 
     def publishMoveBaseGoal(self, pos_x, pos_y, ori_z, ori_w):
@@ -120,20 +123,6 @@ class NavigationNode:
 
     def run(self):
         while not rospy.is_shutdown():
-            # Based on the user's signal, start navigation of the robot to the desired location
-            user_signal = input("Enter signal (patient/bin/initial/stop): ")
-
-            if user_signal == "patient":
-                self.navigate_to_patient()
-            elif user_signal == "bin":
-                self.navigate_to_bin()
-            elif user_signal == "initial":
-                self.navigate_to_initial()
-            elif user_signal == "stop":
-                self.stop_nvaigation_callback()
-            else:
-                rospy.logwarn("Invalid signal entered.")
-
             self.rate.sleep()
 
 if __name__ == '__main__':
