@@ -58,7 +58,7 @@
 
   const navigateToInitialTopic = new ROSLIB.Topic({
     ros: ros,
-    name: '/start_navigation_to_patient',
+    name: '/start_navigation_to_topic',
     mesageType: 'std_msgs/Empty'
   })
 
@@ -97,7 +97,7 @@
       <td><button onclick="navigateToInitialTopic.publish(emptyMsg)">Throw the Bag</button></td>
     </tr>
     <tr>
-      <td><button onclick="stopNavigationTopic .publish(emptyMsg)">Stop Navigation</button></td>
+      <td><button onclick="stopNavigationTopic.publish(emptyMsg)">Stop Navigation</button></td>
     </tr>
 
 </body>

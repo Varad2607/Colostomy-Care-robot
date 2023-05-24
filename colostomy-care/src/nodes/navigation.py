@@ -46,7 +46,7 @@ class NavigationNode:
         rospy.Subscriber('/start_navigation_to_bin', Empty, self.start_navigation_bin_callback)
         rospy.Subscriber('/start_navigation_to_initial', Empty, self.start_navigation_initial_callback)
         rospy.Subscriber('/stop_navigation', Empty, self.stop_navigation_callback)
-        rospy.Subscriber('amcl/pose', PoseWithCovarianceStamped, pose_callback)
+        rospy.Subscriber('amcl/pose', PoseWithCovarianceStamped, self.pose_callback)
 
         self.moveBaseClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
         self.moveBaseClient.wait_for_server()
