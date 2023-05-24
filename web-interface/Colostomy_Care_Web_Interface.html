@@ -68,6 +68,12 @@
     mesageType: 'std_msgs/Empty'
   })
 
+  const resumeNavigationTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/resume_navigation',
+    mesageType: 'std_msgs/Empty'
+  })
+
 
 </script>
 </head>
@@ -98,6 +104,7 @@
     </tr>
     <tr>
       <td><button onclick="stopNavigationTopic.publish(emptyMsg)">Stop Navigation</button></td>
+      <td><button onclick="resumeNavigationTopic.publish(emptyMsg)">Resume Navigation</button></td>
     </tr>
 
 </body>

@@ -24,15 +24,20 @@ Navigation Node
 """
 
 class NavigationNode:
-    initial_pos_x = 0.8601552248001099
-    initial_pos_y = -3.261725425720215
-    initial_ori_z = 0.5800450634824666
-    initial_ori_w = 0.8145843874821204
+    initial_pos_x = 2.5925643420496027
+    initial_pos_y = 2.6296681590861994
+    initial_ori_z = 0.6291654437834525
+    initial_ori_w =  0.7772714097075559
 
     pos_x = 0
     pos_y = 0
     ori_z = 0
     ori_w = 0
+
+    goal_pos_x = 0
+    goal_pos_y = 0
+    goal_ori_z = 0
+    goal_ori_w = 0
 
     def __init__(self):
         rospy.init_node('navigation_node')
@@ -46,6 +51,7 @@ class NavigationNode:
         rospy.Subscriber('/start_navigation_to_bin', Empty, self.start_navigation_bin_callback)
         rospy.Subscriber('/start_navigation_to_initial', Empty, self.start_navigation_initial_callback)
         rospy.Subscriber('/stop_navigation', Empty, self.stop_navigation_callback)
+        rospy.Subscriber('/resume_navigation', Empty, self.resume_navigation_callback)
         rospy.Subscriber('amcl/pose', PoseWithCovarianceStamped, self.pose_callback)
 
         self.moveBaseClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
@@ -65,17 +71,30 @@ class NavigationNode:
         initial_pose.pose.pose.orientation.w = self.initial_ori_w
         print("Publishing initial post")
         self.initialpose_pub.publish(initial_pose)
-        rospy.sleep(1)  # Wait for the message to be published
+        rospy.sleep(1)  # Wait for the message to be publishe
+        
         print("Navigating to patient")
-        self.publishMoveBaseGoal(0.5521001815795898, 4.632573127746582, 0.9748691112372452, 0.22277840100760127)
+        self.goal_pos_x = 0.6796470950400492
+        self.goal_pos_y = 5.249431720826594
+        self.goal_ori_z =  0.9858776645781445
+        self.goal_ori_w = 0.16746710269764503
+        self.publishMoveBaseGoal(self.goal_pos_x, self.goal_pos_y, self.goal_ori_z, self.goal_ori_w)
 
     def navigate_to_bin(self):
         print("Navigating to bin")
-        self.publishMoveBaseGoal(2.9260339736938477, 4.150063991546631, -0.14516202694640776, 0.9894078966396066)
+        self.goal_pos_x = 3.3016340660936687
+        self.goal_pos_y = 3.547072890217289
+        self.goal_ori_z = 0.6537889607855791
+        self.goal_ori_w =  0.7566769421324482
+        self.publishMoveBaseGoal(self.goal_pos_x, self.goal_pos_y, self.goal_ori_z, self.goal_ori_w)
 
     def navigate_to_initial(self):
         print("Navigating back to initial position")
-        self.publishMoveBaseGoal(self.initial_pos_x, self.initial_pos_y, self.initial_ori_z, self.initial_ori_w)
+        self.goal_pos_x = self.initial_pos_x
+        self.goal_pos_y = self.initial_pos_y
+        self.goal_ori_z = self.initial_ori_z
+        self.goal_ori_w = self.initial_ori_w
+        self.publishMoveBaseGoal(self.goal_pos_x, self.goal_pos_y, self.goal_ori_z, self.goal_ori_w)
 
     def publishMoveBaseGoal(self, pos_x, pos_y, ori_z, ori_w):
         # Return to the initial position
@@ -87,7 +106,7 @@ class NavigationNode:
         goal_pose.header.frame_id = 'map'
         goal_pose.pose.position.x = pos_x
         goal_pose.pose.position.y = pos_y
-        goal_pose.pose.orientation.z = ori_z
+        goal_pose.pose.orientation.z = ori_z 
         goal_pose.pose.orientation.w = ori_w
 
 
@@ -113,6 +132,10 @@ class NavigationNode:
 
     def start_navigation_initial_callback(self, msg):
         self.navigate_to_initial()
+
+    def resume_navigation_callback(self, msg):
+        print("Resume robot")
+        self.publishMoveBaseGoal(self.goal_pos_x, self.goal_pos_y, self.goal_ori_z, self.goal_ori_w)
 
     def pose_callback(self, msg):
         pose = msg.pose.pose
