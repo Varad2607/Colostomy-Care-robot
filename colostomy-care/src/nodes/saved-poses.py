@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Saved pose node
     + Perform the saved poses for the joints
@@ -17,68 +18,56 @@ Saved pose node
         - release gripper
         - send signal to navigation to return to initial position
 """
-
-"""
 import stretch_body.arm
 import stretch_body.lift
 import stretch_body.stretch_gripper as gripper
 import time
 from stretch_body.hello_utils import *
 import stretch_body.wrist_yaw as wrist
-
-poses = {
-    'initial': (0.8708912295695886, 0.002971284059920668, 4.310486013958652, 0.6250971710633988),
-    'at bag': (0.5018911521377012, 0.1803935257361701, 4.310486013958652, 0.6250971710633988),
-    'close gripper': (0.5019061603400374, 0.1803935257361701, -4.310486013958652, 0.6250971710633988),
-    'move bag': (0.5018911521377012, 0.18039951757959785, -4.310486013958652, 0.6250971710633988),
-    'final': (0.9014778730754971, 0.002814459945812101, -4.310486013958652, 0.6250971710633988)
-}
-w = wrist.WristYaw()
-l = stretch_body.lift.Lift()
-l.motor.disable_sync_mode()
+import rospy
+from std_msgs.msg import Empty
 
 
-a = stretch_body.arm.Arm()
-a.motor.disable_sync_mode()
+class SavedPosesNode:
+    align_with_bag_poses = {
+        'initial':(0.5615861676470746, 0.24211288835998443, 4.310486013958652, 0.08053399136399617),
+        'at-bag': (0.4795945004727337, 0.24211526939820244, 4.310486013958652, 0.08053399136399617)
+    }
+    remove_bag_poses = {
+        'close gripper': (0.479591149126581, 0.2421176766016756, -7.884661249732196, 0.08053399136399617),
+        'remove and lift': (0.7307844880308441, 0.0027174925323322544, -7.884661249732196, 2.14629478571666)
+    }
+    throw_bag_poses ={
+        'throw-bag': (0.7305178374456467, 0.2614214337317741, 4.310486013958652, -0.23648870479903633)
+    }
 
-g = gripper.StretchGripper()
+    def __init__(self):
+        rospy.init_node('saved_pose_node')
 
-# if not w.startup():
-#     exit()
-if not (l.startup() and g.startup(threaded=False) and a.startup() and w.startup(threaded=False)):
-   exit() # failed to start arm!
+        rospy.Subscriber('/align_with_bag', Empty, self.align_with_bag_callback)
+        rospy.Subscriber('/remove_bag', Empty, self.remove_bag_callback)
+        rospy.Subscriber('/throw_bag', Empty, self.throw_bag_callback)
 
-while True:
-    # Wait for the user to hit the space bar
-    user_in = input("Hit c to close gripper\n"
-                    + "Hit x to open gipper\n"
-                    + "Hit o to move gripper left\n"
-                    + "Hit p to move right gipper\n"
-                    + "Hit space to save pose\n"
-                    + "Hit r to play poses\n")
+        # Set the rate at which to publish messages (adjust as needed)
+        self.rate = rospy.Rate(1)
+        self.w = wrist.WristYaw()
+        self.l = stretch_body.lift.Lift()
+        self.l.motor.disable_sync_mode()
 
-    if user_in == 'c':
-        # close 
-        g.move_to(-100)
-        time.sleep(2)
-    elif user_in == 'x':
-        g.move_to(100)
-        time.sleep(2)
-        # open
-    elif user_in == 'o':
-        #left
-        w.move_by(0.3)
-        time.sleep(2)
-    elif user_in == 'p':
-        w.move_by(-0.3)
-        time.sleep(2)
-    elif user_in == ' ':
-        pose_name = input("Enter a name for the pose: ")
-        g.pull_status()
-        w.pull_status()
-        poses[pose_name] = (l.status['pos'], a.status['pos'], g.status['pos'], w.status['pos'])
-        print(f"Position: {l.status['pos']}, {a.status['pos']}, {g.status['pos']}, {w.status['pos']}")
-    elif user_in == 'r':for pose_name, pose_pos in poses.items():
+
+        self.a = stretch_body.arm.Arm()
+        self.a.motor.disable_sync_mode()
+
+        self.g = gripper.StretchGripper()
+        print("Starting joints")
+
+        if not (self.l.startup() and self.g.startup(threaded=False) and self.a.startup() and self.w.startup(threaded=False)):
+            print("used to exit")
+            #exit() # failed to start arm!
+        print("Completed Saved Poses Init")
+
+    def performPoses(self, poses):
+        for pose_name, pose_pos in poses.items():
             # Get the position values for the pose
             lift_pos, arm_pos, grip_pos, wrist_pos = pose_pos
             # Print the position values for the pose
@@ -87,21 +76,41 @@ while True:
             print(f"  Arm position: {arm_pos}")
             print(f"  Grip position: {grip_pos}")
             print(f"  Wrist position: {wrist_pos}")
-            l.move_to(lift_pos)
-            l.motor.wait_until_at_setpoint()
-            l.push_command()
-            a.move_to(arm_pos)
-            a.push_command()
-            a.motor.wait_until_at_setpoint()
-            w.move_to(wrist_pos)
+            self.l.move_to(lift_pos)
+            self.l.motor.wait_until_at_setpoint()
+            self.l.push_command()
+            self.a.move_to(arm_pos)
+            self.a.push_command()
+            self.a.motor.wait_until_at_setpoint()
+            self.w.move_to(wrist_pos)
             time.sleep(2)
             if grip_pos < 0:
                 # close
-                g.move_to(-100)
+                self.g.move_to(-100)
             else:
-                g.move_to(100)
+                self.g.move_to(100)
             time.sleep(3)
-            
-"""
-        
+    
+    def align_with_bag_callback(self, msg):
+        print("Aligning with Bag")
+        self.performPoses(self.align_with_bag_poses)
+
+    def remove_bag_callback(self, msg):
+        print("Removing Bag")
+        self.performPoses(self.remove_bag_poses)
+
+    def throw_bag_callback(self, msg):
+        print("Throwing Bag")
+        self.performPoses(self.throw_bag_poses)
+
+    def run(self):
+        while not rospy.is_shutdown():
+            self.rate.sleep()
+
+if __name__ == '__main__':
+    try:
+        saved_pose_node = SavedPosesNode()
+        saved_pose_node.run()
+    except rospy.ROSInterruptException:
+        pass
 

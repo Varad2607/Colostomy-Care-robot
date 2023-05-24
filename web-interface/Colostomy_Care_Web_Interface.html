@@ -74,6 +74,24 @@
     mesageType: 'std_msgs/Empty'
   })
 
+  const alignWithBagTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/align_with_bag',
+    mesageType: 'std_msgs/Empty'
+  })
+
+  const removeBagTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/remove_bag',
+    mesageType: 'std_msgs/Empty'
+  })
+
+  const throwBagTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/throw_bag',
+    mesageType: 'std_msgs/Empty'
+  })
+
 
 </script>
 </head>
@@ -89,18 +107,21 @@
 
     </tr>
     <tr>
-      <td><button id="LeftButton" onclick="move(0,1)">Align Robot</button></td>
+      <td><button onclick="alignWithBagTopic.publish(emptyMsg)">Align With Bag</button></td>
       <td><button id="RightButton" onclick="move(0,-1)">Telop Robot</button></td>
       <td></td>
     </tr>
     <tr>
-      <td><button id="backwardButton" onclick="move(-1,-1)">Grab the Bag</button></td>
+      <td><button onclick="removeBagTopic">Remove Bag</button></td>
       </tr>
     <tr>
-      <td><button onclick="navigateToBinTopic.publish(emptyMsg)">Remove the Bag</button></td>
+      <td><button onclick="navigateToBinTopic.publish(emptyMsg)">Navigate To Bin</button></td>
      </tr>
     <tr>
-      <td><button onclick="navigateToInitialTopic.publish(emptyMsg)">Throw the Bag</button></td>
+      <td><button onclick="throwBagTopic.publish(emptyMsg)">Throw the Bag</button></td>
+    </tr>
+    <tr>
+      <td><button onclick="navigateToInitialTopic.publish(emptyMsg)">Navigate To Initial</button></td>
     </tr>
     <tr>
       <td><button onclick="stopNavigationTopic.publish(emptyMsg)">Stop Navigation</button></td>
