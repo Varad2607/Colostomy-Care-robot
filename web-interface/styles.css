@@ -1,0 +1,23 @@
+
+button {
+    height:  100px;
+    width: 200px;
+    font-size: 25px;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    height:  100vh;
+    width: 100vw;
+    top: 0;
+    left: 0
+}
+
+.popup-content {
+    background-color: #fff;
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    text-align: center;
+}

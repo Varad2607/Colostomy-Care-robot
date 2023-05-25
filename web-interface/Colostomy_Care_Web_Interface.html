@@ -8,107 +8,23 @@
 <!-- <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/eventemitter2@6/lib/eventemitter2.min.js"></script>
 <script src="./roslib.js"></script>
+<script src="./colostomy-care.js"></script>
 
-<style>
-    button {height:  100px;
-            width: 200px;
-            font-size: 25px;
-            }
-    
-</style>
+<link rel="stylesheet" type="text/css" href="styles.css">
 
-<!-- Start JavaScript code -->
-
-<script type="text/javascript" type="text/javascript">
-
-    // Create a new ROS instance and connect to the server
-    var ros = new ROSLIB.Ros({
-      url : 'ws://172.28.7.121:9090'
-    });
-    
-     // Event handler for successful connection
-    ros.on('connection', function() {
-      document.getElementById("status").innerHTML = "Connected";
-    });
-
-     // Event handler for connection errors
-    ros.on('error', function(error) {
-      document.getElementById("status").innerHTML = "Error";
-    });
-    
-    // Event handler for connection closure
-    ros.on('close', function() {
-      document.getElementById("status").innerHTML = "Closed";
-    });
-
-
-    const emptyMsg=new ROSLIB.Message({});
-  
-  const navigateToBinTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/start_navigation_to_bin',
-    mesageType: 'std_msgs/Empty'
-  })
-  
-  const navigateToPatientTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/start_navigation_to_patient',
-    mesageType: 'std_msgs/Empty'
-  })
-
-  const navigateToInitialTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/start_navigation_to_initial',
-    mesageType: 'std_msgs/Empty'
-  })
-
-  const stopNavigationTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/stop_navigation',
-    mesageType: 'std_msgs/Empty'
-  })
-
-  const resumeNavigationTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/resume_navigation',
-    mesageType: 'std_msgs/Empty'
-  })
-
-  const alignWithBagTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/align_with_bag',
-    mesageType: 'std_msgs/Empty'
-  })
-
-  const removeBagTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/remove_bag',
-    mesageType: 'std_msgs/Empty'
-  })
-
-  const throwBagTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/throw_bag',
-    mesageType: 'std_msgs/Empty'
-  })
-
-
-</script>
 </head>
 
 <body>
   <h1>Colostomy Care Robot Controller User Interface</h1>
   <p>Connection status: <span id="status"></span></p>
-
   <table>
     <tr>
       <th><button onclick="navigateToPatientTopic.publish(emptyMsg)">Start</button></th>
-      <th><button id="forwardButton" onclick="move(1,0)">Teleop Robot</button></th>
+      <th><button id="openPopup"></buttonid>Teleop Robot</button></th>
 
     </tr>
     <tr>
       <td><button onclick="alignWithBagTopic.publish(emptyMsg)">Align With Bag</button></td>
-      <td><button id="RightButton" onclick="move(0,-1)">Telop Robot</button></td>
       <td></td>
     </tr>
     <tr>
@@ -127,6 +43,30 @@
       <td><button onclick="stopNavigationTopic.publish(emptyMsg)">Stop Navigation</button></td>
       <td><button onclick="resumeNavigationTopic.publish(emptyMsg)">Resume Navigation</button></td>
     </tr>
+  </table>
+
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <h2>Teleoperation</h2>
+      <table>
+        <tr>
+          <th><button>Forward Left</button>
+          <th><button>Forward</button>
+          <th><button>Forward Right</button>
+        </tr>
+        <tr>
+          <th><button>Rotate Left</button>
+          <th><div></div>
+          <th><button>Rotate Right</button>
+        </tr>
+        <tr>
+          <th><button>Backward Left</button>
+          <th><button>Backward</button>
+          <th><button>Backward Right</button>
+        </tr>
+      <button id="closePopup">Close</button>
+    </div>
+  </div>
 
 </body>
 </html>
