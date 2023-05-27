@@ -25,10 +25,10 @@ Navigation Node
 
 class NavigationNode:
     # Define initial position and orientation
-    initial_pos_x = 2.5925643420496027
-    initial_pos_y = 2.6296681590861994
-    initial_ori_z = 0.6291654437834525
-    initial_ori_w =  0.7772714097075559
+    initial_pos_x = -0.07314966748874041
+    initial_pos_y = -0.4065461975616638
+    initial_ori_z = 0.12173599926099654
+    initial_ori_w =  0.9925625151515277
 
     # Needed for Stop button updating goal to be current position
     pos_x = 0
@@ -80,19 +80,19 @@ class NavigationNode:
 
         # Set the goal position and orientation for navigation to the patient
         print("Navigating to patient")
-        self.goal_pos_x = 0.6796470950400492
-        self.goal_pos_y = 5.249431720826594
-        self.goal_ori_z = 0.9858776645781445
-        self.goal_ori_w = 0.16746710269764503
+        self.goal_pos_x = 1.029626459506202
+        self.goal_pos_y = 2.4393594588558365
+        self.goal_ori_z = 0.6611025720792328
+        self.goal_ori_w = 0.7502955345663619
         self.publishMoveBaseGoal(self.goal_pos_x, self.goal_pos_y, self.goal_ori_z, self.goal_ori_w)
 
     def navigate_to_bin(self):
         # Set the goal position and orientation for navigation to the bin
         print("Navigating to bin")
-        self.goal_pos_x = 3.3016340660936687
-        self.goal_pos_y = 3.547072890217289
-        self.goal_ori_z = 0.6537889607855791
-        self.goal_ori_w = 0.7566769421324482
+        self.goal_pos_x = 1.689220564283644
+        self.goal_pos_y = -0.38297850459568644
+        self.goal_ori_z = 0.015562107355612882
+        self.goal_ori_w = 0.9998789030750935
         self.publishMoveBaseGoal(self.goal_pos_x, self.goal_pos_y, self.goal_ori_z, self.goal_ori_w)
 
     def navigate_to_initial(self):

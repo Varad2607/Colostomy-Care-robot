@@ -30,7 +30,7 @@ class TeleopNode:
         self.moveBaseClient.wait_for_server()
 
         # Set the rate at which to publish messages (adjust as needed)
-        self.rate = rospy.Rate(1)
+        self.rate = rospy.Rate(10)
 
     def publishMoveBaseGoal(self, pos_x, pos_y, ori_z, ori_w):
         # Publish the move_base goal with the given position and orientation

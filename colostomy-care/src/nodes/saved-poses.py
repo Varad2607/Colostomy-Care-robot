@@ -40,13 +40,13 @@ class SavedPosesNode:
     # "joint_gripper_finger_left": [-0.375, 0.166] 0.166= open
     align_with_bag_poses = {
         'initial lift up ': (0.7, 0, 0.166, 0.08053399136399617),
-        'initial': (0.5615861676470746, 0.24211288835998443, 0.166, 0.08053399136399617),
-        'at-bag': (0.4795945004727337, 0.24211526939820244, 0.166, 0.08053399136399617)
+        'initial': (0.5615861676470746, 0.5, 0.166, 0.08053399136399617),
+        'at-bag': (0.4795945004727337, 0.5, 0.166, 0.08053399136399617)
     }
     remove_bag_poses = {
-        'close gripper': (0.479591149126581, 0.2421176766016756, -0.375, 0.08053399136399617),
-        'move wrist': (0.479591149126581, 0.2421176766016756, -0.375,  2.14629478571666),
-        'lift up': (0.7307844880308441, 0.2421176766016756, -0.375, 2.14629478571666),
+        'close gripper': (0.479591149126581, 0.5, -0.375, 0.08053399136399617),
+        'move wrist': (0.479591149126581, 0.5, -0.375,  2.14629478571666),
+        'lift up': (0.7307844880308441, 0.5, -0.375, 2.14629478571666),
         'remove and lift': (0.7307844880308441, 0.0027174925323322544, -0.375, 2.14629478571666)
     }
     throw_bag_poses ={
@@ -68,20 +68,6 @@ class SavedPosesNode:
 
         # Set the rate at which to publish messages (adjust as needed)
         self.rate = rospy.Rate(1)
-        self.w = wrist.WristYaw()
-        self.l = stretch_body.lift.Lift()
-        self.l.motor.disable_sync_mode()
-
-
-        self.a = stretch_body.arm.Arm()
-        self.a.motor.disable_sync_mode()
-
-        self.g = gripper.StretchGripper()
-        print("Starting joints")
-
-        if not (self.l.startup() and self.g.startup(threaded=False) and self.a.startup() and self.w.startup(threaded=False)):
-            print("used to exit")
-            #exit() # failed to start arm!
         print("Completed Saved Poses Init")
 
     def performPoses(self, poses):
