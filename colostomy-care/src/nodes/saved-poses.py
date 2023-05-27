@@ -26,19 +26,35 @@ from stretch_body.hello_utils import *
 import stretch_body.wrist_yaw as wrist
 import rospy
 from std_msgs.msg import Empty
-
+from control_msgs.msg import FollowJointTrajectoryActionGoal
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 class SavedPosesNode:
+    #['joint_lift', 'wrist_extension', 'joint_gripper_finger_left', 'joint_wrist_yaw']
+    # joints and limits
+    # "wrist_extension": [0, .518],
+    # "joint_wrist_yaw": [-1.38, 4.58],
+    # "joint_lift": [0.15, 1.1],
+    # "translate_mobile_base": [-30.0, 30.0],
+    # "rotate_mobile_base": [-3.14, 3.14],
+    # "joint_gripper_finger_left": [-0.375, 0.166] 0.166= open
     align_with_bag_poses = {
-        'initial':(0.5615861676470746, 0.24211288835998443, 4.310486013958652, 0.08053399136399617),
-        'at-bag': (0.4795945004727337, 0.24211526939820244, 4.310486013958652, 0.08053399136399617)
+        'initial lift up ': (0.7, 0, 0.166, 0.08053399136399617),
+        'initial': (0.5615861676470746, 0.24211288835998443, 0.166, 0.08053399136399617),
+        'at-bag': (0.4795945004727337, 0.24211526939820244, 0.166, 0.08053399136399617)
     }
     remove_bag_poses = {
-        'close gripper': (0.479591149126581, 0.2421176766016756, -7.884661249732196, 0.08053399136399617),
-        'remove and lift': (0.7307844880308441, 0.0027174925323322544, -7.884661249732196, 2.14629478571666)
+        'close gripper': (0.479591149126581, 0.2421176766016756, -0.375, 0.08053399136399617),
+        'move wrist': (0.479591149126581, 0.2421176766016756, -0.375,  2.14629478571666),
+        'lift up': (0.7307844880308441, 0.2421176766016756, -0.375, 2.14629478571666),
+        'remove and lift': (0.7307844880308441, 0.0027174925323322544, -0.375, 2.14629478571666)
     }
     throw_bag_poses ={
-        'throw-bag': (0.7305178374456467, 0.2614214337317741, 4.310486013958652, -0.23648870479903633)
+        'extend to bin': (0.7307844880308441, 0.2614214337317741, -0.375, 2.14629478571666),
+        'gripper to face bin': (0.7307844880308441, 0.2614214337317741, -0.375, -0.23648870479903633),
+        'release gipper': (0.7307844880308441, 0.2614214337317741, 0.166, -0.23648870479903633),
+        'release gipper 2': (0.7307844880308441, 0.2614214337317741, 0.166, -0.23648870479903633),
+        'stow': (0.2298394901246486, 0, 0.021475731030398976, 3.397767445166695)
     }
 
     def __init__(self):
@@ -47,6 +63,8 @@ class SavedPosesNode:
         rospy.Subscriber('/align_with_bag', Empty, self.align_with_bag_callback)
         rospy.Subscriber('/remove_bag', Empty, self.remove_bag_callback)
         rospy.Subscriber('/throw_bag', Empty, self.throw_bag_callback)
+
+        self.jointPublisher = rospy.Publisher('/stretch_controller/follow_joint_trajectory/goal', FollowJointTrajectoryActionGoal, queue_size=10)
 
         # Set the rate at which to publish messages (adjust as needed)
         self.rate = rospy.Rate(1)
@@ -76,20 +94,22 @@ class SavedPosesNode:
             print(f"  Arm position: {arm_pos}")
             print(f"  Grip position: {grip_pos}")
             print(f"  Wrist position: {wrist_pos}")
-            self.l.move_to(lift_pos)
-            self.l.motor.wait_until_at_setpoint()
-            self.l.push_command()
-            self.a.move_to(arm_pos)
-            self.a.push_command()
-            self.a.motor.wait_until_at_setpoint()
-            self.w.move_to(wrist_pos)
-            time.sleep(2)
-            if grip_pos < 0:
-                # close
-                self.g.move_to(-100)
-            else:
-                self.g.move_to(100)
-            time.sleep(3)
+
+            msg = FollowJointTrajectoryActionGoal()
+
+            # Fill in the necessary fields of the message
+            msg.goal.trajectory = JointTrajectory()
+            msg.goal.trajectory.joint_names = ['joint_lift', 'wrist_extension', 'joint_gripper_finger_left', 'joint_wrist_yaw']
+
+            point = JointTrajectoryPoint()
+            point.positions = [lift_pos, arm_pos, grip_pos, wrist_pos]
+            msg.goal.trajectory.points.append(point)
+
+            # Publish the message
+            self.jointPublisher.publish(msg)
+
+            # Sleep to allow time for the message to be published
+            rospy.sleep(2)
     
     def align_with_bag_callback(self, msg):
         print("Aligning with Bag")

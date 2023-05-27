@@ -28,7 +28,7 @@
       <td></td>
     </tr>
     <tr>
-      <td><button onclick="removeBagTopic">Remove Bag</button></td>
+      <td><button onclick="removeBagTopic.publish(emptyMsg)">Remove Bag</button></td>
       </tr>
     <tr>
       <td><button onclick="navigateToBinTopic.publish(emptyMsg)">Navigate To Bin</button></td>
@@ -45,14 +45,22 @@
     </tr>
   </table>
 
+  <!-- ['joint_lift', 'wrist_extension', 'joint_gripper_finger_left', 'joint_wrist_yaw']
+  //   # joints and limits
+  //   # "wrist_extension": [0, .518],
+  //   # "joint_wrist_yaw": [-1.38, 4.58],
+  //   # "joint_lift": [0.15, 1.1],
+  //   # "translate_mobile_base": [-30.0, 30.0],
+  //   # "rotate_mobile_base": [-3.14, 3.14],
+  //   # "joint_gripper_finger_left": [-0.375, 0.166] 0.166= open -->
   <div id="popup" class="popup">
     <div class="popup-content">
       <h2>Teleoperation</h2>
       <table>
         <tr>
-          <th><button>Forward Left</button>
-          <th><button>Forward</button>
-          <th><button>Forward Right</button>
+          <th><button onclick="">Forward Left</button>
+          <th><button onclick="">Forward</button>
+          <th><button onclick="sendPoseGoal('rotate_mobile_base', 2)">Forward Right</button>
         </tr>
         <tr>
           <th><button>Rotate Left</button>
