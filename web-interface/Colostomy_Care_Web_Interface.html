@@ -58,20 +58,20 @@
       <h2>Teleoperation</h2>
       <table>
         <tr>
-          <th><button onclick="">Forward Left</button>
-          <th><button onclick="">Forward</button>
-          <th><button onclick="sendPoseGoal('rotate_mobile_base', 2)">Forward Right</button>
-        </tr>
-        <tr>
-          <th><button>Rotate Left</button>
           <th><div></div>
-          <th><button>Rotate Right</button>
+          <th><button onclick="teleopForwardTopic.publish(emptyMsg)">Forward</button>
+          <th><div></div>
         </tr>
         <tr>
-          <th><button>Backward Left</button>
-          <th><button>Backward</button>
-          <th><button>Backward Right</button>
+          <th><button onclick="teleopRotLeftTopic.publish(emptyMsg)">Rotate Left</button>
+          <th><div></div>
+          <th><button onclick="teleopRotRightTopic.publish(emptyMsg)">Rotate Right</button>
         </tr>
+        <!-- <tr>
+          <th><div></div>
+          <th><button onclick="teleopBackwardTopic.publish(emptyMsg)">Backward</button>
+          <th><div></div>
+        </tr> -->
       <button id="closePopup">Close</button>
     </div>
   </div>

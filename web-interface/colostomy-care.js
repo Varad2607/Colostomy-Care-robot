@@ -69,6 +69,30 @@ const throwBagTopic = new ROSLIB.Topic({
     mesageType: 'std_msgs/Empty'
 })
 
+const teleopForwardTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/teleop_forward',
+    mesageType: 'std_msgs/Empty'
+})
+
+const teleopBackwardTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/teleop_backward',
+    mesageType: 'std_msgs/Empty'
+})
+
+const teleopRotLeftTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/teleop_rot_left',
+    mesageType: 'std_msgs/Empty'
+})
+
+const teleopRotRightTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/teleop_rot_right',
+    mesageType: 'std_msgs/Empty'
+})
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("openPopup").addEventListener("click", function() {
         document.getElementById("popup").style.display = "block";
