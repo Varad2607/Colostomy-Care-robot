@@ -1,12 +1,4 @@
 <launch>
-  <!-- NAVIGATION -->
-  <include file="$(find stretch_navigation)/launch/navigation.launch">
-    <arg name="map_yaml" value="${HELLO_FLEET_PATH}/maps/colostomy-care.yaml"/>
-  </include>
-
-  <!-- WEBSOCKET -->
-  <include file="$(find rosbridge_server)/launch/tosbridge_websocket.launch"/>
-  
   <!-- COLOSTOMY CARE -->
   <node name="navigation_node" pkg="colostomy-care" type="navigation.py" output="screen"/>
   <node name="saved_poses_node" pkg="colostomy-care" type="saved-poses.py" output="screen"/>
