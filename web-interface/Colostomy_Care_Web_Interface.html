@@ -59,19 +59,23 @@
       <table>
         <tr>
           <th><div></div>
-          <th><button onclick="teleopForwardTopic.publish(emptyMsg)">Forward</button>
+          <th><button onclick="move(1,0)">Forward</button>
           <th><div></div>
         </tr>
         <tr>
-          <th><button onclick="teleopRotLeftTopic.publish(emptyMsg)">Rotate Left</button>
+          <th><button onclick="move(0,1)">Rotate Left</button>
           <th><div></div>
-          <th><button onclick="teleopRotRightTopic.publish(emptyMsg)">Rotate Right</button>
+          <th><button onclick="move(0,-1)">Rotate Right</button>
         </tr>
-        <!-- <tr>
+        <tr>
           <th><div></div>
-          <th><button onclick="teleopBackwardTopic.publish(emptyMsg)">Backward</button>
+          <th><button onclick="move(-1,0)">Backward</button>
           <th><div></div>
-        </tr> -->
+        </tr>
+        <tr>
+          <th><button onclick="incJoint('joint_lift')">Lift up</button>
+          <th><button onclick="decJoint('joint_lift')">Lift Down</button>
+        </tr>
       <button id="closePopup">Close</button>
     </div>
   </div>

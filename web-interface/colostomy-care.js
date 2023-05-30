@@ -121,6 +121,18 @@ const teleOpPublisher = new ROSLIB.Topic({
 //   # "rotate_mobile_base": [-3.14, 3.14],
 //   # "joint_gripper_finger_left": [-0.375, 0.166] 0.166= open
 
+const teleopJointIncTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/teleop_joint_inc',
+    messageType: 'std_msgs/String'
+});
+
+const teleopJointDecTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/teleop_joint_dec',
+    messageType: 'std_msgs/String'
+});
+
 function sendPoseGoal(jointName, jointValue){
     const actionGoal = new ROSLIB.Message({
         goal: {
@@ -141,4 +153,44 @@ function sendPoseGoal(jointName, jointValue){
       });
   
       teleOpPublisher.publish(actionGoal);
+}
+
+// Teleoperating by sending cmd_vel
+var cmdVelTopic= new ROSLIB.Topic({
+    ros : ros,
+    name : '/stretch/cmd_vel',
+    messagType : 'geometry_msgs/Twist'
+  });
+
+function move (linear_x, angular) {
+    console.log("in move")
+    var twist = new ROSLIB.Message({
+      linear: {
+        x: linear_x,
+        y: 0,
+        z: 0
+      },
+      angular: {
+        x: 0,
+        y: 0,
+        z: angular
+      }
+    });
+    cmdVelTopic.publish(twist);
+  }
+
+function incJoint(joint_name) {
+    console.log("Incrementing: " + joint_name)
+    message = new ROSLIB.Message({
+        data: joint_name
+    });
+    teleopJointIncTopic.publish(message);
+}
+
+function decJoint(joint_name) {
+    console.log("Decrementing: " + joint_name)
+    message = new ROSLIB.Message({
+        data: joint_name
+    });
+    teleopJointDecTopic.publish(message);
 }

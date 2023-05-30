@@ -8,70 +8,79 @@ from actionlib_msgs.msg import GoalID
 from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseAction
 from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
 from std_msgs.msg import Empty, String
+from sensor_msgs.msg import JointState
+from control_msgs.msg import FollowJointTrajectoryActionGoal
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 class TeleopNode:
+    joint_limits = {
+        "wrist_extension": [0.0, 0.518],
+        "joint_wrist_yaw": [-1.38, 4.58],
+        "joint_lift": [0.15, 1.1],
+        "translate_mobile_base": [-30.0, 30.0],
+        "rotate_mobile_base": [-3.14, 3.14],
+        "joint_gripper_finger_left": [-0.375, 0.166]
+    }
 
     def __init__(self):
         rospy.init_node('teleop_node')
-
         # Create publishers for sending goals
-        self.movebase_goal_pub = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=10)
+        self.jointPublisher = rospy.Publisher('/stretch_controller/follow_joint_trajectory/goal', FollowJointTrajectoryActionGoal, queue_size=10)
+        
+        rospy.Subscriber('/stretch/joint_states', JointState, self.joint_states_callback)
+        rospy.Subscriber('/teleop_joint_inc', String, self.teleop_joint_inc_callback)
+        rospy.Subscriber('/teleop_joint_dec', String, self.teleop_joint_dec_callback)
+        rospy.spin()
 
-        # Subscribe to topics for receiving signals
-        # x,y, ori_z, ori_w(fixed to 1)
-        rospy.Subscriber('/teleop_forward', Empty, self.teleop_forward_callback)
-        #rospy.Subscriber('/teleop_backward', Empty, self.teleop_backward_callback)
-        rospy.Subscriber('/teleop_rot_left', Empty, self.teleop_rot_left_callback)
-        rospy.Subscriber('/teleop_rot_right', Empty, self.teleop_rot_right_callback)
+    def joint_states_callback(self, joint_state):
+        self.joint_state = joint_state
 
+    def performPoses(self, joint_name, joint_value):
+        msg = FollowJointTrajectoryActionGoal()
 
-        # Initialize the move_base action client
-        self.moveBaseClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
-        self.moveBaseClient.wait_for_server()
+        # Fill in the necessary fields of the message
+        msg.goal.trajectory = JointTrajectory()
+        msg.goal.trajectory.joint_names = [joint_name]
 
-        # Set the rate at which to publish messages (adjust as needed)
-        self.rate = rospy.Rate(10)
+        point = JointTrajectoryPoint()
+        point.positions = [joint_value]
+        msg.goal.trajectory.points.append(point)
 
-    def publishMoveBaseGoal(self, pos_x, pos_y, ori_z, ori_w):
-        # Publish the move_base goal with the given position and orientation
-        goal_pose = PoseStamped()
-        # Set the goal pose details
-        goal_pose.header.stamp = rospy.Time.now()
-        goal_pose.header.frame_id = 'base_link'
-        goal_pose.pose.position.x = pos_x
-        goal_pose.pose.position.y = pos_y
-        goal_pose.pose.orientation.z = ori_z
-        goal_pose.pose.orientation.w = ori_w
+        # Publish the message
+        self.jointPublisher.publish(msg)
 
-        movebase_goal = MoveBaseActionGoal()
-        movebase_goal.header.stamp = rospy.Time.now()
-        movebase_goal.header.frame_id = ''
-        movebase_goal.goal.target_pose = goal_pose
+    def teleop_joint_inc_callback(self, msg):
+        joint_name = msg.data
+        value = self.joint_state[joint_name]
+        
+        if joint_name == "joint_lift":
+            value += 0.1
+        elif joint_name == "joint_gripper_finger_left":
+            value = 0.166 # open
+        else:
+        # Handle other cases or raise an error if needed
+            pass
+        value = min(value, self.joint_limits[joint_name][1])
+        print("Incrementing joint: ", joint_name, " to ", value)
+        self.performPoses(joint_name, value)
 
-        self.movebase_goal_pub.publish(movebase_goal)
-
-
-    def teleop_forward_callback(self, msg):
-        self.publishMoveBaseGoal(0.2, 0, 0, 1)
-
-    def teleop_backward_callback(self, msg):
-        self.publishMoveBaseGoal(-0.2, 0, 0, 1)
-
-    def teleop_rot_left_callback(self, msg):
-        self.publishMoveBaseGoal(0, 0, 0.2, 1)
-
-    def teleop_rot_right_callback(self, msg):
-        self.publishMoveBaseGoal(0, 0, -0.2, 1)
-
-    
-    def run(self):
-        # Run the navigation node
-        while not rospy.is_shutdown():
-            self.rate.sleep()
+    def teleop_joint_dec_callback(self, msg):
+        joint_name = msg.data
+        value = self.joint_state[joint_name]
+        
+        if joint_name == "joint_lift":
+            value -= 0.1
+        elif joint_name == "joint_gripper_finger_left":
+            value = -0.375 # open
+        else:
+        # Handle other cases or raise an error if needed
+            pass
+        value = max(value, self.joint_limits[joint_name][0])
+        print("Decrementing joint: ", joint_name, " to ", value)
+        self.performPoses(joint_name, value)
 
 if __name__ == '__main__':
     try:
         teleop_node = TeleopNode()
-        teleop_node.run()
     except rospy.ROSInterruptException:
         pass
