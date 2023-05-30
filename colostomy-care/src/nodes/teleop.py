@@ -56,9 +56,12 @@ class TeleopNode:
         if joint_name == "joint_lift":
             value += 0.1
         elif joint_name == "joint_gripper_finger_left":
-            value = 0.166 # open
+            value = -0.166 # open
+        elif joint_name == "joint_wrist_yaw":
+            value += 0.1
+        elif joint_name == "wrist_extension":
+            value += 0.05 
         else:
-        # Handle other cases or raise an error if needed
             pass
         value = min(value, self.joint_limits[joint_name][1])
         print("Incrementing joint: ", joint_name, " to ", value)
@@ -72,8 +75,11 @@ class TeleopNode:
             value -= 0.1
         elif joint_name == "joint_gripper_finger_left":
             value = -0.375 # open
+        elif joint_name == "joint_wrist_yaw":
+            value -= -0.1
+        elif joint_name == "wrist_extension":
+            value -= -0.05 
         else:
-        # Handle other cases or raise an error if needed
             pass
         value = max(value, self.joint_limits[joint_name][0])
         print("Decrementing joint: ", joint_name, " to ", value)

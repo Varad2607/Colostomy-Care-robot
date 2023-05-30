@@ -69,30 +69,6 @@ const throwBagTopic = new ROSLIB.Topic({
     mesageType: 'std_msgs/Empty'
 })
 
-const teleopForwardTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/teleop_forward',
-    mesageType: 'std_msgs/Empty'
-})
-
-const teleopBackwardTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/teleop_backward',
-    mesageType: 'std_msgs/Empty'
-})
-
-const teleopRotLeftTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/teleop_rot_left',
-    mesageType: 'std_msgs/Empty'
-})
-
-const teleopRotRightTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/teleop_rot_right',
-    mesageType: 'std_msgs/Empty'
-})
-
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("openPopup").addEventListener("click", function() {
         document.getElementById("popup").style.display = "block";
@@ -104,13 +80,6 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("popup").style.display = "none";
     })
 })
-
-
-const teleOpPublisher = new ROSLIB.Topic({
-    ros: ros,
-    name: '/stretch_controller/follow_joint_trajectory/goal',
-    messageType: 'control_msgs/FollowJointTrajectoryActionGoal',
-});
 
 //   #['joint_lift', 'wrist_extension', 'joint_gripper_finger_left', 'joint_wrist_yaw']
 //   # joints and limits
