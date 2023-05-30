@@ -45,14 +45,6 @@
     </tr>
   </table>
 
-  <!-- ['joint_lift', 'wrist_extension', 'joint_gripper_finger_left', 'joint_wrist_yaw']
-  //   # joints and limits
-  //   # "wrist_extension": [0, .518],
-  //   # "joint_wrist_yaw": [-1.38, 4.58],
-  //   # "joint_lift": [0.15, 1.1],
-  //   # "translate_mobile_base": [-30.0, 30.0],
-  //   # "rotate_mobile_base": [-3.14, 3.14],
-  //   # "joint_gripper_finger_left": [-0.375, 0.166] 0.166= open -->
   <div id="popup" class="popup">
     <div class="popup-content">
       <h2>Teleoperation</h2>
@@ -81,8 +73,8 @@
           <th><button onclick="decJoint('joint_gripper_finger_left')">Close Gripper</button>
         </tr>
         <tr>
-          <th><button onclick="incJoint('joint_wrist_yaw')">writst left</button>
-          <th><button onclick="decJoint('joint_wrist_yaw')">wrist right</button>
+          <th><button onclick="decJoint('joint_wrist_yaw')">Writst left</button>
+          <th><button onclick="incJoint('joint_wrist_yaw')">Wrist right</button>
         </tr>
         <tr>
           <th><button onclick="incJoint('wrist_extension')">Arm out</button>
@@ -91,12 +83,5 @@
       <button id="closePopup">Close</button>
     </div>
   </div>
-  <!-- //   # joints and limits
-  //   # "wrist_extension": [0, .518], X
-  //   # "joint_wrist_yaw": [-1.38, 4.58], X
-  //   # "joint_lift": [0.15, 1.1], X
-  //   # "translate_mobile_base": [-30.0, 30.0],
-  //   # "rotate_mobile_base": [-3.14, 3.14],
-  //   # "joint_gripper_finger_left": [-0.375, 0.166] 0.166= open --> X
 </body>
 </html>

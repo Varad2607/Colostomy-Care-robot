@@ -50,8 +50,9 @@ class TeleopNode:
         self.jointPublisher.publish(msg)
 
     def teleop_joint_inc_callback(self, msg):
+        joint_state = self.joint_state
         joint_name = msg.data
-        value = self.joint_state[joint_name]
+        value = joint_state.position[joint_state.name.index(joint_name)]
         
         if joint_name == "joint_lift":
             value += 0.1
@@ -68,8 +69,9 @@ class TeleopNode:
         self.performPoses(joint_name, value)
 
     def teleop_joint_dec_callback(self, msg):
+        joint_state = self.joint_state
         joint_name = msg.data
-        value = self.joint_state[joint_name]
+        value = joint_state.position[joint_state.name.index(joint_name)]
         
         if joint_name == "joint_lift":
             value -= 0.1
@@ -78,7 +80,7 @@ class TeleopNode:
         elif joint_name == "joint_wrist_yaw":
             value -= -0.1
         elif joint_name == "wrist_extension":
-            value -= -0.05 
+            value -= 0.05 
         else:
             pass
         value = max(value, self.joint_limits[joint_name][0])
