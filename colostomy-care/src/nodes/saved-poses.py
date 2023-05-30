@@ -25,7 +25,7 @@ import time
 from stretch_body.hello_utils import *
 import stretch_body.wrist_yaw as wrist
 import rospy
-from std_msgs.msg import Empty
+from std_msgs.msg import Empty, String
 from control_msgs.msg import FollowJointTrajectoryActionGoal
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
@@ -57,14 +57,15 @@ class SavedPosesNode:
         'stow': (0.2298394901246486, 0, 0.021475731030398976, 3.397767445166695)
     }
 
+    stow = {
+        'stow': (0.2298394901246486, 0, 0.021475731030398976, 3.397767445166695)
+    }
+
     def __init__(self):
         rospy.init_node('saved_pose_node')
 
-        rospy.Subscriber('/align_with_bag', Empty, self.align_with_bag_callback)
-        rospy.Subscriber('/remove_bag', Empty, self.remove_bag_callback)
-        rospy.Subscriber('/throw_bag', Empty, self.throw_bag_callback)
-
         self.jointPublisher = rospy.Publisher('/stretch_controller/follow_joint_trajectory/goal', FollowJointTrajectoryActionGoal, queue_size=10)
+        rospy.Subscriber('/colostomy_care/saved_pose', String, self.saved_pose_callback)
 
         # Set the rate at which to publish messages (adjust as needed)
         self.rate = rospy.Rate(1)
@@ -96,18 +97,17 @@ class SavedPosesNode:
 
             # Sleep to allow time for the message to be published
             rospy.sleep(2)
-    
-    def align_with_bag_callback(self, msg):
-        print("Aligning with Bag")
-        self.performPoses(self.align_with_bag_poses)
 
-    def remove_bag_callback(self, msg):
-        print("Removing Bag")
-        self.performPoses(self.remove_bag_poses)
-
-    def throw_bag_callback(self, msg):
-        print("Throwing Bag")
-        self.performPoses(self.throw_bag_poses)
+    def saved_pose_callback(self, msg):
+        pose = msg.data
+        if pose == "align_with_bag":
+            self.performPoses(self.align_with_bag_poses)
+        elif pose == "remove_bag":
+            self.performPoses(self.remove_bag_poses)
+        elif pose == "throw_bag":
+            self.performPoses(self.throw_bag_poses)
+        elif pose == "stow":
+            self.performPoses(self.stow)
 
     def run(self):
         while not rospy.is_shutdown():

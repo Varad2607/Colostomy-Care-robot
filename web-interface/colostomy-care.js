@@ -51,24 +51,6 @@ const resumeNavigationTopic = new ROSLIB.Topic({
     mesageType: 'std_msgs/Empty'
 })
 
-const alignWithBagTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/align_with_bag',
-    mesageType: 'std_msgs/Empty'
-})
-
-const removeBagTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/remove_bag',
-    mesageType: 'std_msgs/Empty'
-})
-
-const throwBagTopic = new ROSLIB.Topic({
-    ros: ros,
-    name: '/throw_bag',
-    mesageType: 'std_msgs/Empty'
-})
-
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("openPopup").addEventListener("click", function() {
         document.getElementById("popup").style.display = "block";
@@ -80,6 +62,34 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("popup").style.display = "none";
     })
 })
+
+const navigationTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/colostomy_care/navigation',
+    messageType: 'std_msgs/String'
+});
+
+function navigateTo(nav_goal) {
+    console.log("Navigation goal: " + nav_goal);
+    const message = new ROSLIB.Message({
+        data: nav_goal
+    });
+    navigationTopic.publish(message);
+}
+
+const savedPoseTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/colostomy_care/saved_pose',
+    messageType: 'std_msgs/String'
+});
+
+function savedPose(pose_name) {
+    console.log("Calling saved pose: " + pose_name);
+    const message = new ROSLIB.Message({
+        data: pose_name
+    });
+    savedPoseTopic.publish(message);
+}
 
 //   #['joint_lift', 'wrist_extension', 'joint_gripper_finger_left', 'joint_wrist_yaw']
 //   # joints and limits

@@ -19,29 +19,30 @@
   <p>Connection status: <span id="status"></span></p>
   <table>
     <tr>
-      <th><button onclick="navigateToPatientTopic.publish(emptyMsg)">Start</button></th>
+      <th><button onclick="navigateTo('patient')">Start</button></th>
       <th><button id="openPopup"></buttonid>Teleop Robot</button></th>
 
     </tr>
     <tr>
-      <td><button onclick="alignWithBagTopic.publish(emptyMsg)">Align With Bag</button></td>
+      <td><button onclick="savedPose('align_with_bag')">Align With Bag</button></td>
       <td></td>
     </tr>
     <tr>
-      <td><button onclick="removeBagTopic.publish(emptyMsg)">Remove Bag</button></td>
+      <td><button onclick="savedPose('remove_bag')">Remove Bag</button></td>
       </tr>
     <tr>
-      <td><button onclick="navigateToBinTopic.publish(emptyMsg)">Navigate To Bin</button></td>
+      <td><button onclick="navigateTo('bin')">Navigate To Bin</button></td>
      </tr>
     <tr>
-      <td><button onclick="throwBagTopic.publish(emptyMsg)">Throw the Bag</button></td>
+      <td><button onclick="savedPose('throw_bag')">Throw the Bag</button></td>
     </tr>
     <tr>
-      <td><button onclick="navigateToInitialTopic.publish(emptyMsg)">Navigate To Initial</button></td>
+      <td><button onclick="navigateTo('initial')">Navigate To Initial</button></td>
     </tr>
     <tr>
-      <td><button onclick="stopNavigationTopic.publish(emptyMsg)">Stop Navigation</button></td>
-      <td><button onclick="resumeNavigationTopic.publish(emptyMsg)">Resume Navigation</button></td>
+      <td><button onclick="navigateTo('stop')">Stop Navigation</button></td>
+      <td><button onclick="navigateTo('resume')">Resume Navigation</button></td>
+      <td><button onclick="savedPose('stow')">Stow Robot</button></td>
     </tr>
   </table>
 

@@ -5,7 +5,7 @@ import actionlib
 from actionlib_msgs.msg import GoalID
 from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseAction
 from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
-from std_msgs.msg import Empty, String
+from std_msgs.msg import String
 
 """
 Navigation Node
@@ -48,19 +48,10 @@ class NavigationNode:
         # Create publishers for sending goals
         self.initialpose_pub = rospy.Publisher('/initialpose', PoseWithCovarianceStamped, queue_size=10)
         self.movebase_goal_pub = rospy.Publisher('/move_base/goal', MoveBaseActionGoal, queue_size=10)
-        self.throwing_signal_pub = rospy.Publisher('/throwing_signal', String, queue_size=10)
 
         # Subscribe to topics for receiving signals
-        rospy.Subscriber('/start_navigation_to_patient', Empty, self.start_navigation_patient_callback)
-        rospy.Subscriber('/start_navigation_to_bin', Empty, self.start_navigation_bin_callback)
-        rospy.Subscriber('/start_navigation_to_initial', Empty, self.start_navigation_initial_callback)
-        rospy.Subscriber('/stop_navigation', Empty, self.stop_navigation_callback)
-        rospy.Subscriber('/resume_navigation', Empty, self.resume_navigation_callback)
+        rospy.Subscriber('/colostomy_care/navigation', String, self.navigation_callback)
         rospy.Subscriber('amcl/pose', PoseWithCovarianceStamped, self.pose_callback)
-
-        # Initialize the move_base action client
-        self.moveBaseClient = actionlib.SimpleActionClient('move_base', MoveBaseAction)
-        self.moveBaseClient.wait_for_server()
 
         # Set the rate at which to publish messages (adjust as needed)
         self.rate = rospy.Rate(1)
@@ -127,25 +118,9 @@ class NavigationNode:
         print("Stopping robot")
         self.publishMoveBaseGoal(self.pos_x, self.pos_y, self.ori_z, self.ori_w)
 
-    def stop_navigation_callback(self, msg):
-        # Callback function for stopping navigation
-        self.stop_navigation()
-
-    def start_navigation_patient_callback(self, msg):
-        # Callback function for starting navigation to the patient
-        self.navigate_to_patient()
-
-    def start_navigation_bin_callback(self, msg):
-        # Callback function for starting navigation to the bin
-        self.navigate_to_bin()
-
-    def start_navigation_initial_callback(self, msg):
-        # Callback function for starting navigation to the initial position
-        self.navigate_to_initial()
-
-    def resume_navigation_callback(self, msg):
-        # Resume the robot's navigation by publishing the previous goal
-        print("Resume robot")
+    def resume_navigation(self):
+        # Stop the robot by updating the goal to the current position
+        print("Resuming robot")
         self.publishMoveBaseGoal(self.goal_pos_x, self.goal_pos_y, self.goal_ori_z, self.goal_ori_w)
 
     def pose_callback(self, msg):
@@ -155,6 +130,20 @@ class NavigationNode:
         self.pos_y = pose.position.y
         self.ori_z = pose.orientation.z
         self.ori_w = pose.orientation.w
+
+    def navigation_callback(self, msg):
+        nav_goal = msg.data
+        print("Navigation Goal: ", nav_goal)
+        if nav_goal == "patient":
+            self.navigate_to_patient()
+        elif nav_goal == "bin":
+            self.navigate_to_bin()
+        elif nav_goal == "initial":
+            self.navigate_to_initial()
+        elif nav_goal == "stop":
+            self.stop_navigation()
+        elif nav_goal == "resume":
+            self.resume_navigation()
 
     def run(self):
         # Run the navigation node
