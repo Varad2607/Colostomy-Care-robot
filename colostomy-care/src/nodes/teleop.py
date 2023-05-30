@@ -78,7 +78,7 @@ class TeleopNode:
         elif joint_name == "joint_gripper_finger_left":
             value = -0.375 # open
         elif joint_name == "joint_wrist_yaw":
-            value -= -0.1
+            value -= 0.1
         elif joint_name == "wrist_extension":
             value -= 0.05 
         else:
