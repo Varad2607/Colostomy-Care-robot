@@ -42,7 +42,6 @@
 
   var cmdVelTopic= new ROSLIB.Topic({
     ros : ros,
-    // name : '/stretch/cmd_vel',
     name : '/stretch_diff_drive_controller/cmd_vel',
     messagType : 'geometry_msgs/Twist'
   });
@@ -50,7 +49,6 @@
   var trajectoryClient = new ROSLIB.ActionClient({
     ros : ros,
     serverName : '/stretch_controller/follow_joint_trajectory',
-    // serverName : '/stretch_head_controller/follow_joint_trajectory',
     actionName : 'control_msgs/FollowJointTrajectoryAction'
   });
 

@@ -11,13 +11,32 @@ button {
     height:  100vh;
     width: 100vw;
     top: 0;
-    left: 0
+    left: 0;
 }
 
 .popup-content {
-    background-color: #fff;
-    width: 300px;
+    background-color: #80ced6;
+    width: 600px;
     margin: 100px auto;
     padding: 20px;
     text-align: center;
+}
+
+#block4 {
+    bottom: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+
+#closePopup {
+    background-color: #ff30a9;
+}
+
+body {
+    background-color: #555555;
+}
+
+.text {
+    color: white;
 }

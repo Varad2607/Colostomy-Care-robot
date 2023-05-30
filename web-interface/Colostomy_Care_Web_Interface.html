@@ -15,8 +15,8 @@
 </head>
 
 <body>
-  <h1>Colostomy Care Robot Controller User Interface</h1>
-  <p>Connection status: <span id="status"></span></p>
+  <h1 class="text">Colostomy Care Robot Controller User Interface</h1>
+  <p class="text">Connection status: <span class="text" id="status"></span></p>
   <table>
     <tr>
       <th><button onclick="navigateTo('patient')">Start</button></th>
@@ -39,6 +39,9 @@
     <tr>
       <td><button onclick="navigateTo('initial')">Navigate To Initial</button></td>
     </tr>
+  </table>
+
+  <table id="block4">
     <tr>
       <td><button onclick="navigateTo('stop')">Stop Navigation</button></td>
       <td><button onclick="navigateTo('resume')">Resume Navigation</button></td>
@@ -66,22 +69,34 @@
           <th><div></div>
         </tr>
         <tr>
-          <th><button onclick="incJoint('joint_lift')">Lift up</button>
+          <hr>
+        </tr>
+        <tr>
+          <th><button onclick="incJoint('joint_lift')">Lift Up</button>
+          <th><div></div></th>
           <th><button onclick="decJoint('joint_lift')">Lift Down</button>
         </tr>
         <tr>
           <th><button onclick="incJoint('joint_gripper_finger_left')">Open Gripper</button>
+            <th><div></div></th>
           <th><button onclick="decJoint('joint_gripper_finger_left')">Close Gripper</button>
         </tr>
         <tr>
-          <th><button onclick="incJoint('joint_wrist_yaw')">Writst left</button>
-          <th><button onclick="decJoint('joint_wrist_yaw')">Wrist right</button>
+          <th><button onclick="incJoint('joint_wrist_yaw')">Writst Left</button>
+            <th><div></div></th>
+          <th><button onclick="decJoint('joint_wrist_yaw')">Wrist Right</button>
         </tr>
         <tr>
-          <th><button onclick="incJoint('wrist_extension')">Arm out</button>
-          <th><button onclick="decJoint('wrist_extension')">Arm in</button>
+          <th><button onclick="incJoint('wrist_extension')">Arm Out</button>
+            <th><div></div></th>
+          <th><button onclick="decJoint('wrist_extension')">Arm In</button>
         </tr>
-      <button id="closePopup">Close</button>
+        <tr>
+          <th><div></div></th>
+          <th><button id="closePopup">Close</button>
+            <th><div></div></th>
+        </tr>
+      </table>
     </div>
   </div>
 </body>
