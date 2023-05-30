@@ -1,0 +1,11 @@
+<launch>
+  <!-- NAVIGATION -->
+  <include file="$(find stretch_navigation)/launch/navigation.launch">
+    <arg name="map_yaml" value="${HELLO_FLEET_PATH}/maps/colostomy-care.yaml"/>
+  </include>
+
+  <!-- COLOSTOMY CARE -->
+  <node name="navigation_node" pkg="colostomy-care" type="navigation.py" output="screen"/>
+  <node name="saved_poses_node" pkg="colostomy-care" type="saved-poses.py" output="screen"/>
+  <node name="teleop_node" pkg="colostomy-care" type="teleop.py" output="screen"/>
+</launch>
