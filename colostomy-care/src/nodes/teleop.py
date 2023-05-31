@@ -45,6 +45,7 @@ class TeleopNode:
         point = JointTrajectoryPoint()
         point.positions = [joint_value]
         msg.goal.trajectory.points.append(point)
+       
 
         # Publish the message
         self.jointPublisher.publish(msg)

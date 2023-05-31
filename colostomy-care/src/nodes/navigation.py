@@ -80,10 +80,10 @@ class NavigationNode:
     def navigate_to_bin(self):
         # Set the goal position and orientation for navigation to the bin
         print("Navigating to bin")
-        self.goal_pos_x = 1.689220564283644
-        self.goal_pos_y = -0.38297850459568644
-        self.goal_ori_z = 0.015562107355612882
-        self.goal_ori_w = 0.9998789030750935
+        self.goal_pos_x = 1.334373470484363 #1.689220564283644
+        self.goal_pos_y = -0.23431980356307047 #-0.38297850459568644
+        self.goal_ori_z = 0.29861778526066785 # 0.015562107355612882
+        self.goal_ori_w = 0.9543727879220015 #0.9998789030750935
         self.publishMoveBaseGoal(self.goal_pos_x, self.goal_pos_y, self.goal_ori_z, self.goal_ori_w)
 
     def navigate_to_initial(self):
