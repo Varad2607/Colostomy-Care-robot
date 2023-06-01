@@ -1,7 +1,7 @@
 //Create a new ROS instance and connect to the server
 var ros = new ROSLIB.Ros({
-    url : 'ws://172.28.7.121:9090'
-    //url : 'ws://localhost:9090'
+    //url : 'ws://172.28.7.121:9090'
+    url : 'ws://localhost:9090'
 });
 
 // Event handler for successful connection
@@ -20,7 +20,12 @@ ros.on('close', function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("openPopup").addEventListener("click", function() {
+    document.getElementById("openPopup1").addEventListener("click", function() {
+        document.getElementById("popup").style.display = "block";
+    })
+})
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("openPopup2").addEventListener("click", function() {
         document.getElementById("popup").style.display = "block";
     })
 })

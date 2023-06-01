@@ -1,6 +1,6 @@
 
 button {
-    height:  50px;
+    height:  75px;
     width: 200px;
     font-size: 20px;
 }
@@ -12,6 +12,7 @@ button {
     width: 100vw;
     top: 0;
     left: 0;
+    overflow:auto;
 }
 
 .popup-content {
@@ -27,6 +28,10 @@ button {
     margin-left: auto;
     margin-right: auto;
     justify-content: center;
+}
+
+h1 {
+    text-align: center;
 }
 
 #closePopup {

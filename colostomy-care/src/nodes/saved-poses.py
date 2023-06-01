@@ -43,12 +43,17 @@ class SavedPosesNode:
         'initial': (0.5615861676470746, 0.5, 0.166, 0.08053399136399617),
         'at-bag': (0.4795945004727337, 0.5, 0.166, 0.08053399136399617)
     }
-    remove_bag_poses = {
+    
+    auto_remove_bag_poses = {
         'close gripper': (0.479591149126581, 0.5, -0.375, 0.08053399136399617),
-        'move wrist': (0.479591149126581, 0.5, -0.375,  2.14629478571666),
+        'move wrist': (0.479591149126581, 0.5, -0.375,  2.14629478571666)
+    }
+
+    bring_bag_away_poses = {
         'lift up': (0.7307844880308441, 0.5, -0.375, 2.14629478571666),
         'remove and lift': (0.7307844880308441, 0.0027174925323322544, -0.375, 2.14629478571666)
     }
+
     throw_bag_poses ={
         'extend to bin': (0.7307844880308441, 0.2614214337317741, -0.375, 2.14629478571666),
         'gripper to face bin': (0.7307844880308441, 0.2614214337317741, -0.375, -0.23648870479903633),
@@ -102,8 +107,10 @@ class SavedPosesNode:
         pose = msg.data
         if pose == "align_with_bag":
             self.performPoses(self.align_with_bag_poses)
-        elif pose == "remove_bag":
-            self.performPoses(self.remove_bag_poses)
+        elif pose == "auto_remove_bag":
+            self.performPoses(self.auto_remove_bag_poses)
+        elif pose == "bring_bag_away":
+            self.performPoses(self.bring_bag_away_poses)
         elif pose == "throw_bag":
             self.performPoses(self.throw_bag_poses)
         elif pose == "stow":
