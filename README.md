@@ -18,3 +18,6 @@ For recording new poses: we utilize the `testing/saved-poses-by-demo.py`.
 `roslaunch rosbridge_server rosbridge_websocket.launch`
 5. Launch file to start our nodes on the robot\
  `roslaunch colostomy-care colostomy-care.launch`
+ 
+ ## Development Blog
+ https://sites.google.com/view/colostomy-care-robot/home
