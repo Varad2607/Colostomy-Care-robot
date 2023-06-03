@@ -1,7 +1,7 @@
 //Create a new ROS instance and connect to the server
 var ros = new ROSLIB.Ros({
-    //url : 'ws://172.28.7.121:9090'
-    url : 'ws://localhost:9090'
+    url : 'ws://172.28.7.121:9090'
+    //url : 'ws://localhost:9090'
 });
 
 // Event handler for successful connection

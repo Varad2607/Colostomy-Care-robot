@@ -19,7 +19,9 @@ class TeleopNode:
         "joint_lift": [0.15, 1.1],
         "translate_mobile_base": [-30.0, 30.0],
         "rotate_mobile_base": [-3.14, 3.14],
-        "joint_gripper_finger_left": [-0.375, 0.166]
+        "joint_gripper_finger_left": [-0.375, 0.166],
+        "joint_head_pan": [-3,3],
+        "joint_head_tilt": [-1,1]
     }
 
     def __init__(self):
@@ -45,7 +47,6 @@ class TeleopNode:
         point = JointTrajectoryPoint()
         point.positions = [joint_value]
         msg.goal.trajectory.points.append(point)
-       
 
         # Publish the message
         self.jointPublisher.publish(msg)
@@ -58,11 +59,15 @@ class TeleopNode:
         if joint_name == "joint_lift":
             value += 0.1
         elif joint_name == "joint_gripper_finger_left":
-            value = -0.166 # open
+            value = 0.166 # open
         elif joint_name == "joint_wrist_yaw":
             value += 0.3
         elif joint_name == "wrist_extension":
             value += 0.05 
+        elif joint_name == "joint_head_tilt":
+            value += 0.05 
+        elif joint_name == "joint_head_pan":
+            value += 0.1 
         else:
             pass
         value = min(value, self.joint_limits[joint_name][1])
@@ -82,6 +87,10 @@ class TeleopNode:
             value -= 0.3
         elif joint_name == "wrist_extension":
             value -= 0.05 
+        elif joint_name == "joint_head_tilt":
+            value -= 0.05 
+        elif joint_name == "joint_head_pan":
+            value -= 0.1 
         else:
             pass
         value = max(value, self.joint_limits[joint_name][0])
