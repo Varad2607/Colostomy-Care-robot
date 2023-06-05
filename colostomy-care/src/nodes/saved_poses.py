@@ -18,14 +18,8 @@ Saved pose node
         - release gripper
         - send signal to navigation to return to initial position
 """
-import stretch_body.arm
-import stretch_body.lift
-import stretch_body.stretch_gripper as gripper
-import time
-from stretch_body.hello_utils import *
-import stretch_body.wrist_yaw as wrist
 import rospy
-from std_msgs.msg import Empty, String
+from std_msgs.msg import String
 from control_msgs.msg import FollowJointTrajectoryActionGoal
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
