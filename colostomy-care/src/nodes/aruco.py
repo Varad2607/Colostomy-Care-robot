@@ -1,3 +1,25 @@
+'''
+Robot will nevigate to the center of the room, somewhere away from the bed
+
+1) Perform a scan to find the marker of the bed, try three times
+
+2) saved that value in the maps's frame
+
+3) send the navigation goal of that bag , with some buffer space
+
+4) robot will go to that point
+
+
+Calculation:
+
+Before transforming to the map's frame
+
+always subtract the y value of the marker pose to give a buffer postion that is left of the patient
+
+'''
+
+
+
 import rospy
 import tf2_ros
 from visualization_msgs.msg import MarkerArray
