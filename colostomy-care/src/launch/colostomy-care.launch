@@ -14,6 +14,7 @@
 
   <!-- COLOSTOMY CARE -->
   <node name="navigation_node" pkg="colostomy-care" type="navigation.py" output="screen"/>
-  <node name="saved_poses_node" pkg="colostomy-care" type="saved-poses.py" output="screen"/>
+  <node name="saved_poses_node" pkg="colostomy-care" type="saved_poses.py" output="screen"/>
   <node name="teleop_node" pkg="colostomy-care" type="teleop.py" output="screen"/>
+  <node name="aruco_navigation_node" pkg="colostomy-care" type="aruco_navigation.py" output="screen"/>
 </launch>

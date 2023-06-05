@@ -56,6 +56,19 @@ class NavigationNode:
         # Set the rate at which to publish messages (adjust as needed)
         self.rate = rospy.Rate(1)
 
+
+    def set_initial_pose(self):
+        initial_pose = PoseWithCovarianceStamped()
+
+        # Set the position and orientation values
+        initial_pose.pose.pose.position.x = self.initial_pos_x
+        initial_pose.pose.pose.position.y = self.initial_pos_y
+        initial_pose.pose.pose.orientation.z = self.initial_ori_z
+        initial_pose.pose.pose.orientation.w = self.initial_ori_w
+        print("Publishing initial pose")
+        self.initialpose_pub.publish(initial_pose)
+        rospy.sleep(1)  # Wait for the message to be published
+        
     def navigate_to_patient(self):
         # Send /initialpose to navigation for localization
         initial_pose = PoseWithCovarianceStamped()
@@ -134,7 +147,9 @@ class NavigationNode:
     def navigation_callback(self, msg):
         nav_goal = msg.data
         print("Navigation Goal: ", nav_goal)
-        if nav_goal == "patient":
+        if nav_goal == "set initialpose":
+            self.set_intiial_pose()
+        elif nav_goal == "patient":
             self.navigate_to_patient()
         elif nav_goal == "bin":
             self.navigate_to_bin()

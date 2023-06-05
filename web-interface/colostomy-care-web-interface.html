@@ -19,15 +19,21 @@
   <p class="text">Connection status: <span class="text" id="status"></span></p>
   <table>
     <tr>
-      <td><button onclick="navigateTo('patient')">Start</button></td>
-      <td><button id="openPopup1"></buttonid>Teleop Robot</button></td>
+      <td><button onclick="arucoNavigation('set patient')">Save pose by Patient (Aruco)</button></td>
+      <td><button onclick="arucoNavigation('set bin')">Save pose by Bin (Aruco)</button></td>
+    </tr>
+    <tr>
+      <td><button onclick="navigateTo('set initialpose')">Set Initial Pose</button></td>
+      <td><button onclick="navigateTo('patient')">Navigate to Patient</button></td>
+      <td><button onclick="arucoNavigation('patient')">Navigate to Patient (Aruco)</button></td>
     </tr>
     <tr>
       <td><button onclick="savedPose('align_with_bag')">Align With Bag</button></td>
       <td></td>
     </tr>
     <tr>
-      <td><button onclick="savedPose('auto_remove_bag')"></buttonid>Autonomously remove bag</button></td>
+      <!-- Removed the option for autonomous bag removal upon user request. -->
+      <!-- <td><button onclick="savedPose('auto_remove_bag')"></buttonid>Autonomously remove bag</button></td> -->
       <td><button id="openPopup2"></buttonid>Teleop to remove bag</button></td>
     </tr>
     <tr>
@@ -35,6 +41,7 @@
     </tr>
     <tr>
       <td><button onclick="navigateTo('bin')">Navigate To Bin</button></td>
+      <td><button onclick="arucoNavigation('patient')">Navigate to Patient (Aruco)</button></td>
      </tr>
     <tr>
       <td><button onclick="savedPose('throw_bag')">Throw the Bag</button></td>
@@ -46,9 +53,10 @@
 
   <table id="block4">
     <tr>
-      <td><button onclick="navigateTo('stop')">Stop Navigation</button></td>
+      <td><button id="stop" onclick="navigateTo('stop')">Stop Navigation</button></td>
       <td><button onclick="navigateTo('resume')">Resume Navigation</button></td>
       <td><button onclick="savedPose('stow')">Stow Robot</button></td>
+      <td><button id="openPopup1"></buttonid>Teleop Robot</button></td>
     </tr>
   </table>
 
