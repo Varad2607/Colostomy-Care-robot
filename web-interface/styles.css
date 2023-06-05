@@ -17,7 +17,7 @@ button {
 
 .popup-content {
     background-color: #80ced6;
-    width: 600px;
+    width: 460px;
     margin: 100px auto;
     padding: 20px;
     text-align: center;
@@ -28,6 +28,13 @@ button {
     margin-left: auto;
     margin-right: auto;
     justify-content: center;
+}
+
+#aruco-poses {
+    top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: top;
 }
 
 h1 {
@@ -47,11 +54,13 @@ body {
 }
 
 #openPopup1 {
-    background-color: rgb(175, 163, 0);
+    background-color: rgb(28, 24, 255);
+    color: white;
 }
 
 #stop, .clear {
     background-color: rgb(204, 49, 49);
+    color: white;
 }
 
 .save {

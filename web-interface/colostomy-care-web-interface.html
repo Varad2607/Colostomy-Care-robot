@@ -17,13 +17,15 @@
 <body>
   <h1 class="text">Colostomy Care Robot Controller User Interface</h1>
   <p class="text">Connection status: <span class="text" id="status"></span></p>
-  <table>
+  <table id="aruco-poses">
     <tr>
       <td><button class="save" onclick="arucoNavigation('set patient')">Save pose by Patient (Aruco)</button></td>
       <td><button class="save" onclick="arucoNavigation('set bin')">Save pose by Bin (Aruco)</button></td>
       <td><button class="clear" onclick="arucoNavigation('clear patient')">Clear pose by Patient (Aruco)</button></td>
       <td><button class="clear" onclick="arucoNavigation('clear bin')">Clear pose by Bin(Aruco)</button></td>
     </tr>
+  </table>
+  <table>
     <tr>
       <td><button onclick="navigateTo('set initialpose')">Set Initial Pose</button></td>
       <td><button onclick="navigateTo('patient')">Navigate to Patient</button></td>
