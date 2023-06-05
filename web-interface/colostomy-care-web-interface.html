@@ -19,8 +19,10 @@
   <p class="text">Connection status: <span class="text" id="status"></span></p>
   <table>
     <tr>
-      <td><button onclick="arucoNavigation('set patient')">Save pose by Patient (Aruco)</button></td>
-      <td><button onclick="arucoNavigation('set bin')">Save pose by Bin (Aruco)</button></td>
+      <td><button class="save" onclick="arucoNavigation('set patient')">Save pose by Patient (Aruco)</button></td>
+      <td><button class="save" onclick="arucoNavigation('set bin')">Save pose by Bin (Aruco)</button></td>
+      <td><button class="clear" onclick="arucoNavigation('clear patient')">Clear pose by Patient (Aruco)</button></td>
+      <td><button class="clear" onclick="arucoNavigation('clear bin')">Clear pose by Bin(Aruco)</button></td>
     </tr>
     <tr>
       <td><button onclick="navigateTo('set initialpose')">Set Initial Pose</button></td>
@@ -41,7 +43,7 @@
     </tr>
     <tr>
       <td><button onclick="navigateTo('bin')">Navigate To Bin</button></td>
-      <td><button onclick="arucoNavigation('patient')">Navigate to Patient (Aruco)</button></td>
+      <td><button onclick="arucoNavigation('bin')">Navigate to Bin (Aruco)</button></td>
      </tr>
     <tr>
       <td><button onclick="savedPose('throw_bag')">Throw the Bag</button></td>

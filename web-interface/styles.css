@@ -50,6 +50,10 @@ body {
     background-color: rgb(175, 163, 0);
 }
 
-#stop {
+#stop, .clear {
     background-color: rgb(204, 49, 49);
+}
+
+.save {
+    background-color: rgb(49, 204, 57);
 }

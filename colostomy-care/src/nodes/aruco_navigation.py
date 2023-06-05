@@ -37,6 +37,11 @@ class ArucoNavigationNode:
         elif aruco_nav_goal == "to bin":
             self.aruco.go_to_pose("bin")
 
+        elif aruco_nav_goal == "clear patient":
+            self.aruco.delete_pose("patient")
+        elif aruco_nav_goal == "clear bin":
+            self.aruco.delete_pose("bin")
+
     def run(self):
         # Run the navigation node
         while not rospy.is_shutdown():

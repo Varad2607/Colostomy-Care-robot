@@ -1,11 +1,8 @@
 <launch>
+  <param name="file_path" value="$(find colostomy-care)/config" />
 
   <!-- REALSENSE D435i -->
-  <!-- <include file="$(find stretch_core)/launch/d435i_high_resolution.launch"></include>
-  <node name="d435i_configure" pkg="stretch_core" type="d435i_configure" output="screen">
-    <param name="initial_mode" type="string" value="High Accuracy"/>
-  </node> -->
-  <!-- -->
+  <include file="$(find stretch_core)/launch/d435i_high_resolution.launch"></include>
 
   <!-- ARUCO MARKER DETECTOR -->
   <rosparam command="load" file="$(find stretch_core)/config/stretch_marker_dict.yaml" />
