@@ -173,6 +173,7 @@ class ArucoNavigationHelperNode(hm.HelloNode):
                 return False
 
         # self.switch_to_navigation_mode()
+        print("Found_tag function return with true")
         return True
 
     
