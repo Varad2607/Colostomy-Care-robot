@@ -35,7 +35,7 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 import actionlib
 from move_base_msgs.msg import MoveBaseGoal, MoveBaseAction
 
-class ArucoNavigationNode(hm.HelloNode):
+class ArucoNavigationHelperNode(hm.HelloNode):
     def __init__(self):
         
         hm.HelloNode.__init__(self)
@@ -46,6 +46,7 @@ class ArucoNavigationNode(hm.HelloNode):
         
         try:
             saved_file = open(self.file_path + "/saved_poses.json")
+            print(saved_file)
             self.pose_dict = json.load(saved_file)
             saved_file.close()
         except:
@@ -146,7 +147,7 @@ class ArucoNavigationNode(hm.HelloNode):
                 rospy.loginfo("Found Requested Tag")
                 
                 found_tag = True
-            
+                print("Found tag status:", found_tag)
             except:
                 
                 # Check if the head has completed a full rotation
@@ -182,7 +183,7 @@ class ArucoNavigationNode(hm.HelloNode):
         '''
 
         if self.find_tag(frame_id):
-        
+            print("found ", frame_id, "saving pose")
             pose = PoseStamped()
             pose.header.frame_id = frame_id
             
@@ -199,11 +200,12 @@ class ArucoNavigationNode(hm.HelloNode):
             self.pose_dict[pose_id.lower()] = self.pose_to_list(pose)
             json.dump(self.pose_dict,saved_file)
             saved_file.close()
-
+            print("saved ", frame_id, "'s pose")
             return True
 
         else: 
             rospy.loginfo("Could not save pose")
+            print("could not save ", frame_id, "'s pose")
             return False
 
     def go_to_pose(self, pose_id):
@@ -211,8 +213,9 @@ class ArucoNavigationNode(hm.HelloNode):
         Finds the requested pose in the saved pose dictionary, and sends a move_base goal to return to the given pose.
         '''
         
-        if self.pose_dict.has_key(pose_id):
-
+        if pose_id in self.pose_dict:
+            pose = self.pose_dict[pose_id]
+            print("Navigating to ", pose_id)
             pose = {'wrist_extension': 0.01}
             self.move_to_pose(pose)
 
@@ -251,6 +254,7 @@ class ArucoNavigationNode(hm.HelloNode):
             rospy.loginfo(map_goal)
             self.client.send_goal_and_wait(map_goal)
             rospy.loginfo("DONE!")
+            print("Done navigating to ", pose_id)
 
             return True
         else:
@@ -278,7 +282,7 @@ class ArucoNavigationNode(hm.HelloNode):
             return False
 
     def main(self):
-        hm.HelloNode.main(self, 'save_pose', 'save_pose', wait_for_first_pointcloud=False)
+        hm.HelloNode.main(self, 'aruco_navigation_node', 'aruco_navigation_node', wait_for_first_pointcloud=False)
 
         self.r = rospy.Rate(rospy.get_param('~rate', 15.0))
 
@@ -293,7 +297,7 @@ class ArucoNavigationNode(hm.HelloNode):
 
 if __name__ == '__main__':
     
-    node = ArucoNavigationNode()
+    node = ArucoNavigationHelperNode()
     node.main()
 
     try:

@@ -1,7 +1,7 @@
 //Create a new ROS instance and connect to the server
 var ros = new ROSLIB.Ros({
-    url : 'ws://172.28.7.121:9090'
-    //url : 'ws://localhost:9090'
+    //url : 'ws://172.28.7.121:9090'
+    url : 'ws://localhost:9090'
 });
 
 // Event handler for successful connection
@@ -86,6 +86,7 @@ function savedPose(pose_name) {
     });
     savedPoseTopic.publish(message);
 }
+
 ////////////////////////////////////////////////////////////////////////////
 // Teleoperating joints
 //
@@ -114,28 +115,33 @@ const teleopJointDecTopic = new ROSLIB.Topic({
     messageType: 'std_msgs/String'
 });
 
-function sendPoseGoal(jointName, jointValue){
-    const actionGoal = new ROSLIB.Message({
-        goal: {
-          trajectory: {
-            joint_names: [jointName],
-            points: [
-              {
-                positions: [jointValue],
-                time_from_start: { sec: 0, nsec: 0 },
-              },
-            ],
-          },
-        },
-        goal_id: {
-          stamp: { sec: 0, nsec: 0 },
-          id: '',
-        },
-      });
-  
-      teleOpPublisher.publish(actionGoal);
+const stopJointsTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/colostomy_care/teleop_joint_stop',
+    messageType: 'std_msgs/Empty'
+});
+
+function stopJoint() {
+    console.log("Stopping joints")
+    message = new ROSLIB.Message({});
+    stopJointsTopic.publish(message);
 }
 
+function incJoint(joint_name) {
+    console.log("Incrementing: " + joint_name)
+    message = new ROSLIB.Message({
+        data: joint_name
+    });
+    teleopJointIncTopic.publish(message);
+}
+
+function decJoint(joint_name) {
+    console.log("Decrementing: " + joint_name)
+    message = new ROSLIB.Message({
+        data: joint_name
+    });
+    teleopJointDecTopic.publish(message);
+}
 ////////////////////////////////////////////////////////////////////////////
 // Teleoperating by sending cmd_vel
 ////////////////////////////////////////////////////////////////////////////
@@ -161,19 +167,3 @@ function move (linear_x, angular) {
     });
     cmdVelTopic.publish(twist);
   }
-
-function incJoint(joint_name) {
-    console.log("Incrementing: " + joint_name)
-    message = new ROSLIB.Message({
-        data: joint_name
-    });
-    teleopJointIncTopic.publish(message);
-}
-
-function decJoint(joint_name) {
-    console.log("Decrementing: " + joint_name)
-    message = new ROSLIB.Message({
-        data: joint_name
-    });
-    teleopJointDecTopic.publish(message);
-}

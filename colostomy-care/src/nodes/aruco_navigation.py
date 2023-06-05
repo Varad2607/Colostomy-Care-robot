@@ -19,7 +19,7 @@ class ArucoNavigationNode:
         # Subscribe to topics for receiving signals
         rospy.Subscriber('/colostomy_care/aruco_navigation', String, self.aruco_navigation_callback)
     
-        aruco = an.ArucoNavigationNode()
+        self.aruco = an.ArucoNavigationHelperNode()
 
         # Set the rate at which to publish messages (adjust as needed)
         self.rate = rospy.Rate(1)
@@ -28,18 +28,24 @@ class ArucoNavigationNode:
         aruco_nav_goal = msg.data
         print("Aruco Navigation Goal: ",  aruco_nav_goal)
         if  aruco_nav_goal == "save patient":
+            print("saving patient pose")
             self.aruco.save_pose("patient","colostomy-bag")
         elif aruco_nav_goal == "save bin":
+            print("saving patient bin")
             self.aruco.save_pose("bin","bin")
 
         elif aruco_nav_goal == "to patient":
+            print("moving to patient")
             self.aruco.go_to_pose("patient")
         elif aruco_nav_goal == "to bin":
+            print("moving to bin")
             self.aruco.go_to_pose("bin")
 
         elif aruco_nav_goal == "clear patient":
+            print("clear patient pose")
             self.aruco.delete_pose("patient")
         elif aruco_nav_goal == "clear bin":
+            print("clear bin pose")
             self.aruco.delete_pose("bin")
 
     def run(self):
