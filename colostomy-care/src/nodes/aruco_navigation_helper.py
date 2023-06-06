@@ -123,9 +123,9 @@ class ArucoNavigationHelperNode(hm.HelloNode):
 
         # self.switch_to_position_mode()
 
-        min_rotation = -4.05
-        max_rotation = 1.78
-        num_steps = 10
+        min_rotation = -3
+        max_rotation = 1.83
+        num_steps = 20
         step = abs(min_rotation - max_rotation) / num_steps
 
         pose = {'joint_head_tilt': -1*pi/4, 'joint_head_pan': min_rotation}
@@ -151,7 +151,8 @@ class ArucoNavigationHelperNode(hm.HelloNode):
             except:
                 
                 # Check if the head has completed a full rotation
-                if self.joint_state.position[self.joint_state.name.index('joint_head_pan')] > (max_rotation - step):
+                print("Head pan value: ", self.joint_state.position[self.joint_state.name.index('joint_head_pan')])
+                if self.joint_state.position[self.joint_state.name.index('joint_head_pan')] >= (max_rotation - 2*step):
                     
                     pose = {'joint_head_pan': min_rotation}
                     self.move_to_pose(pose)
@@ -171,7 +172,7 @@ class ArucoNavigationHelperNode(hm.HelloNode):
                 rospy.loginfo("Timed Out Looking for Tag")
                 # self.switch_to_navigation_mode()
                 return False
-
+            print("Head scan try: ", count)
         # self.switch_to_navigation_mode()
         print("Found_tag function return with true")
         return True
@@ -217,14 +218,6 @@ class ArucoNavigationHelperNode(hm.HelloNode):
         if pose_id in self.pose_dict:
             pose = self.pose_dict[pose_id]
             print("Navigating to ", pose_id)
-            pose = {'wrist_extension': 0.01}
-            self.move_to_pose(pose)
-
-            pose = {'joint_wrist_yaw': 3.3}
-            self.move_to_pose(pose)
-            
-            pose = {'joint_lift': 0.22}
-            self.move_to_pose(pose)
             
             pose_goal = self.list_to_pose(self.pose_dict[pose_id])
             tag = pose_goal.header.frame_id 
@@ -267,7 +260,8 @@ class ArucoNavigationHelperNode(hm.HelloNode):
         Removes a requested pose from the saved pose dictionary
         '''
 
-        if self.pose_dict.has_key(pose_id): 
+        if pose_id in self.pose_dict:
+            pose = self.pose_dict[pose_id]
             saved_file = open(self.file_path + "/saved_poses.json","w")
             
             del self.pose_dict[pose_id]

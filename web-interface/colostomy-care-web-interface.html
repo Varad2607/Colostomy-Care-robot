@@ -17,41 +17,44 @@
 <body>
   <h1 class="text">Colostomy Care Robot Controller User Interface</h1>
   <p class="text">Connection status: <span class="text" id="status"></span></p>
-  <table id="aruco-poses">
+  <table id="aruco-poses"> 
     <tr>
-      <td><button class="save" onclick="arucoNavigation('save patient')">Save pose by Patient (Aruco)</button></td>
-      <td><button class="save" onclick="arucoNavigation('save bin')">Save pose by Bin (Aruco)</button></td>
-      <td><button class="clear" onclick="arucoNavigation('clear patient')">Clear pose by Patient (Aruco)</button></td>
-      <td><button class="clear" onclick="arucoNavigation('clear bin')">Clear pose by Bin(Aruco)</button></td>
+      <td><button class="save" onclick="arucoNavigation('save patient')">Save Patient's Pose (Aruco)</button></td>
+      <td><button class="save" onclick="arucoNavigation('save bin')">Save Bin's Pose (Aruco)</button></td>
+      <td><button class="clear" onclick="arucoNavigation('clear patient')">Clear Patient's Pose (Aruco)</button></td>
+      <td><button class="clear" onclick="arucoNavigation('clear bin')">Clear Bin's Pose(Aruco)</button></td>
     </tr>
   </table>
-  <table>
+  <table style="padding-top: 50px;">
     <tr>
-      <td><button onclick="navigateTo('set initialpose')">Set Initial Pose</button></td>
-      <td><button onclick="navigateTo('patient')">Navigate to Patient</button></td>
-      <td><button onclick="arucoNavigation('to patient')">Navigate to Patient (Aruco)</button></td>
+      <td><button  onclick="navigateTo('set initialpose')">Set Initial Pose</button></td>
+      <td><button class="navigation" onclick="navigateTo('patient')">Navigate to Patient</button></td>
+      <td><button class="navigation" onclick="arucoNavigation('to patient')">Navigate to Patient (Aruco)</button></td>
     </tr>
     <tr>
-      <td><button onclick="savedPose('align_with_bag')">Align With Bag</button></td>
+      <td><button onclick="savedPose('align_with_bag')">Align arm With Bag</button></td>
       <td></td>
     </tr>
     <tr>
       <!-- Removed the option for autonomous bag removal upon user request. -->
       <!-- <td><button onclick="savedPose('auto_remove_bag')"></buttonid>Autonomously remove bag</button></td> -->
-      <td><button id="openPopup2"></buttonid>Teleop to remove bag</button></td>
+      <td><div></div></td>
+    </tr>
+  </table>
+  <h2 class="text" style="padding-top: 50px;">Please use teleoperation to remove the bag</h2>
+  <table>
+    <tr>
+      <td><button onclick="savedPose('bring_bag_away')">Bring Bag away (After grabbing)</button></td>
     </tr>
     <tr>
-      <td><button onclick="savedPose('bring_bag_away')">Bring Bag away from patient</button></td>
-    </tr>
-    <tr>
-      <td><button onclick="navigateTo('bin')">Navigate To Bin</button></td>
-      <td><button onclick="arucoNavigation('to bin')">Navigate to Bin (Aruco)</button></td>
+      <td><button class="navigation" onclick="navigateTo('bin')">Navigate To Bin</button></td>
+      <td><button class="navigation" onclick="arucoNavigation('to bin')">Navigate to Bin (Aruco)</button></td>
      </tr>
     <tr>
       <td><button onclick="savedPose('throw_bag')">Throw the Bag</button></td>
     </tr>
     <tr>
-      <td><button onclick="navigateTo('initial')">Navigate To Initial</button></td>
+      <td><button class="navigation" onclick="navigateTo('initial')">Navigate To Initial</button></td>
     </tr>
   </table>
 

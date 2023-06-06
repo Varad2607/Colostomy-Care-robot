@@ -1,9 +1,6 @@
 <launch>
   <param name="file_path" value="$(find colostomy-care)/config" />
-
-  <!-- REALSENSE D435i -->
-  <include file="$(find stretch_core)/launch/d435i_high_resolution.launch"></include>
-
+  
   <!-- ARUCO MARKER DETECTOR -->
   <rosparam command="load" file="$(find colostomy-care)/config/stretch_marker_dict.yaml" />
   <node name="detect_aruco_markers" pkg="stretch_core" type="detect_aruco_markers" output="screen"/>
