@@ -63,7 +63,7 @@
         "stow": {
             "joint_lift": 0.23,
             "wrist_extension": 0,
-            "joint_gripper_finger_left": 0.021475731030398976,
+            "joint_gripper_finger_left": 0,
             "joint_wrist_yaw": 3.39
         }
     }
