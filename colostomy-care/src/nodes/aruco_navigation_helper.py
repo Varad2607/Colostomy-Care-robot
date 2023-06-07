@@ -147,11 +147,9 @@ class ArucoNavigationHelperNode(hm.HelloNode):
                 rospy.loginfo("Found Requested Tag")
                 
                 found_tag = True
-                print("Found tag status:", found_tag)
             except:
                 
                 # Check if the head has completed a full rotation
-                print("Head pan value: ", self.joint_state.position[self.joint_state.name.index('joint_head_pan')])
                 if self.joint_state.position[self.joint_state.name.index('joint_head_pan')] >= (max_rotation - 2*step):
                     
                     pose = {'joint_head_pan': min_rotation}
@@ -174,7 +172,6 @@ class ArucoNavigationHelperNode(hm.HelloNode):
                 return False
             print("Head scan try: ", count)
         # self.switch_to_navigation_mode()
-        print("Found_tag function return with true")
         return True
 
     
@@ -198,7 +195,7 @@ class ArucoNavigationHelperNode(hm.HelloNode):
             pose.pose.orientation.z = self.rotation[2]
             pose.pose.orientation.w = self.rotation[3]
 
-            saved_file = open(self.file_path + "/saved_poses.json","w")
+            saved_file = open(self.file_path + "/saved_aruco_nav_poses.json","w")
             self.pose_dict[pose_id.lower()] = self.pose_to_list(pose)
             json.dump(self.pose_dict,saved_file)
             saved_file.close()
@@ -262,7 +259,7 @@ class ArucoNavigationHelperNode(hm.HelloNode):
 
         if pose_id in self.pose_dict:
             pose = self.pose_dict[pose_id]
-            saved_file = open(self.file_path + "/saved_poses.json","w")
+            saved_file = open(self.file_path + "/saved_aruco_nav_poses.json","w")
             
             del self.pose_dict[pose_id]
             
