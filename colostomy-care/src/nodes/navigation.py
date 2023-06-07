@@ -70,9 +70,6 @@ class NavigationNode:
         rospy.sleep(1)  # Wait for the message to be published
         
     def navigate_to_patient(self):
-        # Send /initialpose to navigation for localization
-        initial_pose = PoseWithCovarianceStamped()
-
         # Set the goal position and orientation for navigation to the patient
         print("Navigating to patient")
         self.goal_pos_x = 1.029626459506202
