@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 
 import rospy
-import actionlib
 import aruco_navigation_helper as an
-from actionlib_msgs.msg import GoalID
-from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseAction
-from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
 from std_msgs.msg import String
 
-
-
 class ArucoNavigationNode:
-
+    '''
+    Aruco Navigation Node is used to navigate to different location based
+    on the saved poses relative to the colostomy-bag's and bin's
+    aruco marker.
+    '''
 
     def __init__(self):
         rospy.init_node('aruco_navigation_node')
 
-        # Subscribe to topics for receiving signals
+        # Subscribes to topic to recieve messages coming from web UI
         rospy.Subscriber('/colostomy_care/aruco_navigation', String, self.aruco_navigation_callback)
     
         self.aruco = an.ArucoNavigationHelperNode()

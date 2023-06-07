@@ -45,7 +45,7 @@ class ArucoNavigationHelperNode(hm.HelloNode):
         self.file_path = rospy.get_param("/file_path")
         
         try:
-            saved_file = open(self.file_path + "/saved_poses.json")
+            saved_file = open(self.file_path + "/saved_aruco_nav_poses.json")
             print(saved_file)
             self.pose_dict = json.load(saved_file)
             saved_file.close()
