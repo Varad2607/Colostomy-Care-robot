@@ -30,31 +30,25 @@
             "joint_lift": 0.7,
             "wrist_extension": 0,
             "joint_gripper_finger_left": -0.375,
-            "joint_wrist_yaw": 2.14629478571666
+            "joint_wrist_yaw": 2.15
         }
     },
     "throw_bag": {
         "extend to bin": {
             "joint_lift": 0.7,
-            "wrist_extension": 0,
+            "wrist_extension": 0.3,
             "joint_gripper_finger_left": -0.375,
-            "joint_wrist_yaw": 2.14629478571666
+            "joint_wrist_yaw": 2.15
         },
         "gripper to face bin": {
             "joint_lift": 0.7,
-            "wrist_extension": 0,
+            "wrist_extension": 0.3,
             "joint_gripper_finger_left": -0.375,
             "joint_wrist_yaw": 0
         },
         "release gipper": {
             "joint_lift": 0.7,
-            "wrist_extension": 0.27,
-            "joint_gripper_finger_left": 0.166,
-            "joint_wrist_yaw": 0
-        },
-        "release gipper 2": {
-            "joint_lift": 0.7,
-            "wrist_extension": 0.27,
+            "wrist_extension": 0.3,
             "joint_gripper_finger_left": 0.166,
             "joint_wrist_yaw": 0
         },

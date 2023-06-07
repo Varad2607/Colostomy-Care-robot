@@ -53,18 +53,17 @@ class TeleopNode:
         msg = FollowJointTrajectoryActionGoal()
 
         msg.goal.trajectory = JointTrajectory()
-        msg.goal.trajectory.joint_names = ["wrist_extension", "joint_wrist_yaw","joint_lift","translate_mobile_base"
-                                           ,"rotate_mobile_base", "joint_gripper_finger_left", "joint_head_pan",
+        msg.goal.trajectory.joint_names = ["wrist_extension", "joint_wrist_yaw","joint_lift",
+                                        "joint_gripper_finger_left", "joint_head_pan",
                                             "joint_head_tilt"]
 
         point = JointTrajectoryPoint()
         point.positions = [joint_state.position[joint_state.name.index("wrist_extension")],
                            joint_state.position[joint_state.name.index("joint_wrist_yaw")],
                            joint_state.position[joint_state.name.index("joint_lift")],
-                           joint_state.position[joint_state.name.index("translate_mobile_base")],
-                           joint_state.position[joint_state.name.index("rotate_mobile_base")],
                            joint_state.position[joint_state.name.index("joint_gripper_finger_left")],
-                           joint_state.position[joint_state.name.index("joint_head_pan")]]
+                           joint_state.position[joint_state.name.index("joint_head_pan")],
+                           joint_state.position[joint_state.name.index("joint_head_tilt")]]
         
         msg.goal.trajectory.points.append(point)
         # Publish the message

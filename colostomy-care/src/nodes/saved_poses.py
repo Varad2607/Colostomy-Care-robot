@@ -86,7 +86,7 @@ class SavedPosesNode:
     def joint_states_callback(self, joint_state):
         self.joint_state = joint_state
 
-    def performPoses(self, poses):
+    def sendPoses(self, poses):
         joint_state = self.joint_state
         for pose_name, pose_pos in poses.items():
             # Update joints with current value if null in json
@@ -95,7 +95,7 @@ class SavedPosesNode:
                     pose_pos[joint_name] = joint_state.position[joint_state.name.index(joint_name)]
             
             # Get the position values for the pose
-            lift_pos, arm_pos, grip_pos, wrist_pos = pose_pos
+            lift_pos, arm_pos, grip_pos, wrist_pos = pose_pos.values()
             # Print the position values for the pose
             print(f"Pose '{pose_name}':")
             print(f"  Lift position: {lift_pos}")
@@ -117,9 +117,9 @@ class SavedPosesNode:
             self.jointPublisher.publish(msg)
 
             # Sleep to allow time for the message to be published
-            rospy.sleep(2)
+            rospy.sleep(3)
 
-    def perofrmPoses(self, action_name):
+    def performPoses(self, action_name):
         if action_name in self.action_dict:
             poses =  self.action_dict[action_name]
             self.sendPoses(poses)
