@@ -595,6 +595,10 @@ Visualization Manager:
           Value: true
         respeaker_base:
           Value: false
+        shoulder_top:
+          Value: true
+        wrist_top:
+          Value: false
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
