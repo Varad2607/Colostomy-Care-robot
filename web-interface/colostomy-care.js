@@ -36,6 +36,9 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 })
 
+////////////////////////////////////////////////////////////////////////////
+// Fixed Navigations
+////////////////////////////////////////////////////////////////////////////
 const navigationTopic = new ROSLIB.Topic({
     ros: ros,
     name: '/colostomy_care/navigation',
@@ -50,6 +53,26 @@ function navigateTo(nav_goal) {
     navigationTopic.publish(message);
 }
 
+////////////////////////////////////////////////////////////////////////////
+// Aruco Navigations
+////////////////////////////////////////////////////////////////////////////
+const arucoNavigationTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/colostomy_care/aruco_navigation',
+    messageType: 'std_msgs/String'
+});
+
+function arucoNavigation(aruco_nav_goal) {
+    console.log("Aruco Navigation goal: " + aruco_nav_goal);
+    const message = new ROSLIB.Message({
+        data: aruco_nav_goal
+    });
+    arucoNavigationTopic.publish(message);
+}
+
+////////////////////////////////////////////////////////////////////////////
+// Saved Pose
+////////////////////////////////////////////////////////////////////////////
 const savedPoseTopic = new ROSLIB.Topic({
     ros: ros,
     name: '/colostomy_care/saved_pose',
@@ -64,50 +87,64 @@ function savedPose(pose_name) {
     savedPoseTopic.publish(message);
 }
 
-//   #['joint_lift', 'wrist_extension', 'joint_gripper_finger_left', 'joint_wrist_yaw']
-//   # joints and limits
-//   # "wrist_extension": [0, .518],
-//   # "joint_wrist_yaw": [-1.38, 4.58],
-//   # "joint_lift": [0.15, 1.1],
-//   # "translate_mobile_base": [-30.0, 30.0],
-//   # "rotate_mobile_base": [-3.14, 3.14],
-//   # "joint_gripper_finger_left": [-0.375, 0.166] 0.166= open
+////////////////////////////////////////////////////////////////////////////
+// Teleoperating joints
+//
+// 
+// Joints and their limits:
+// ------------------------
+//   "wrist_extension"            
+//   "joint_wrist_yaw"             
+//   "joint_lift"                
+//   "translate_mobile_base"      
+//   "rotate_mobile_base"        
+//   "joint_gripper_finger_left" 
+//   "joint_head_pan" 
+//   "joint_head_tilt"
+////////////////////////////////////////////////////////////////////////////
 
 const teleopJointIncTopic = new ROSLIB.Topic({
     ros: ros,
-    name: '/teleop_joint_inc',
+    name: '/colostomy_care/teleop_joint_inc',
     messageType: 'std_msgs/String'
 });
 
 const teleopJointDecTopic = new ROSLIB.Topic({
     ros: ros,
-    name: '/teleop_joint_dec',
+    name: '/colostomy_care/teleop_joint_dec',
     messageType: 'std_msgs/String'
 });
 
-function sendPoseGoal(jointName, jointValue){
-    const actionGoal = new ROSLIB.Message({
-        goal: {
-          trajectory: {
-            joint_names: [jointName],
-            points: [
-              {
-                positions: [jointValue],
-                time_from_start: { sec: 0, nsec: 0 },
-              },
-            ],
-          },
-        },
-        goal_id: {
-          stamp: { sec: 0, nsec: 0 },
-          id: '',
-        },
-      });
-  
-      teleOpPublisher.publish(actionGoal);
+const stopJointsTopic = new ROSLIB.Topic({
+    ros: ros,
+    name: '/colostomy_care/teleop_joint_stop',
+    messageType: 'std_msgs/Empty'
+});
+
+function stopJoint() {
+    console.log("Stopping joints")
+    message = new ROSLIB.Message({});
+    stopJointsTopic.publish(message);
 }
 
+function incJoint(joint_name) {
+    console.log("Incrementing: " + joint_name)
+    message = new ROSLIB.Message({
+        data: joint_name
+    });
+    teleopJointIncTopic.publish(message);
+}
+
+function decJoint(joint_name) {
+    console.log("Decrementing: " + joint_name)
+    message = new ROSLIB.Message({
+        data: joint_name
+    });
+    teleopJointDecTopic.publish(message);
+}
+////////////////////////////////////////////////////////////////////////////
 // Teleoperating by sending cmd_vel
+////////////////////////////////////////////////////////////////////////////
 var cmdVelTopic= new ROSLIB.Topic({
     ros : ros,
     name : '/stretch/cmd_vel',
@@ -130,19 +167,3 @@ function move (linear_x, angular) {
     });
     cmdVelTopic.publish(twist);
   }
-
-function incJoint(joint_name) {
-    console.log("Incrementing: " + joint_name)
-    message = new ROSLIB.Message({
-        data: joint_name
-    });
-    teleopJointIncTopic.publish(message);
-}
-
-function decJoint(joint_name) {
-    console.log("Decrementing: " + joint_name)
-    message = new ROSLIB.Message({
-        data: joint_name
-    });
-    teleopJointDecTopic.publish(message);
-}

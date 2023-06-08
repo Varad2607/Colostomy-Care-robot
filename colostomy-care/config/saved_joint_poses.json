@@ -1,0 +1,70 @@
+{
+    "align_with_bag": {
+        "initial lift up ": {
+            "joint_lift": 0.7,
+            "wrist_extension": 0,
+            "joint_gripper_finger_left": 0.166,
+            "joint_wrist_yaw": 3.3
+        },
+        "wrist out": {
+            "joint_lift": 0.7,
+            "wrist_extension": 0.5,
+            "joint_gripper_finger_left": 0.166,
+            "joint_wrist_yaw": 0
+        },
+        "arm out": {
+            "joint_lift": 0.5,
+            "wrist_extension": 0.5,
+            "joint_gripper_finger_left": 0.166,
+            "joint_wrist_yaw": 0
+        }
+    },
+    "bring_bag_away": {
+        "lift up": {
+            "joint_lift": null,
+            "wrist_extension": null,
+            "joint_gripper_finger_left": -0.375,
+            "joint_wrist_yaw": 2.15
+        },
+        "remove and lift": {
+            "joint_lift": 0.7,
+            "wrist_extension": 0,
+            "joint_gripper_finger_left": -0.375,
+            "joint_wrist_yaw": 2.15
+        }
+    },
+    "throw_bag": {
+        "extend to bin": {
+            "joint_lift": 0.7,
+            "wrist_extension": 0.3,
+            "joint_gripper_finger_left": -0.375,
+            "joint_wrist_yaw": 2.15
+        },
+        "gripper to face bin": {
+            "joint_lift": 0.7,
+            "wrist_extension": 0.3,
+            "joint_gripper_finger_left": -0.375,
+            "joint_wrist_yaw": 0
+        },
+        "release gipper": {
+            "joint_lift": 0.7,
+            "wrist_extension": 0.3,
+            "joint_gripper_finger_left": 0.166,
+            "joint_wrist_yaw": 0
+        },
+        "stow": {
+            "joint_lift": 0.23,
+            "wrist_extension": 0,
+            "joint_gripper_finger_left": 0,
+            "joint_wrist_yaw": 3.39
+        }
+    },
+    "stow": {
+        "stow": {
+            "joint_lift": 0.23,
+            "wrist_extension": 0,
+            "joint_gripper_finger_left": 0,
+            "joint_wrist_yaw": 3.39
+        }
+    }
+}

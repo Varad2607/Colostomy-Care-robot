@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 
 import rospy
-import math
-import tf
-import actionlib
-from actionlib_msgs.msg import GoalID
-from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseAction
-from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
-from std_msgs.msg import Empty, String
+from std_msgs.msg import String, Empty
 from sensor_msgs.msg import JointState
 from control_msgs.msg import FollowJointTrajectoryActionGoal
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
@@ -30,8 +24,9 @@ class TeleopNode:
         self.jointPublisher = rospy.Publisher('/stretch_controller/follow_joint_trajectory/goal', FollowJointTrajectoryActionGoal, queue_size=10)
         
         rospy.Subscriber('/stretch/joint_states', JointState, self.joint_states_callback)
-        rospy.Subscriber('/teleop_joint_inc', String, self.teleop_joint_inc_callback)
-        rospy.Subscriber('/teleop_joint_dec', String, self.teleop_joint_dec_callback)
+        rospy.Subscriber('/colostomy_care/teleop_joint_stop', Empty, self.teleop_joint_stop_callback)
+        rospy.Subscriber('/colostomy_care/teleop_joint_inc', String, self.teleop_joint_inc_callback)
+        rospy.Subscriber('/colostomy_care/teleop_joint_dec', String, self.teleop_joint_dec_callback)
         rospy.spin()
 
     def joint_states_callback(self, joint_state):
@@ -48,6 +43,29 @@ class TeleopNode:
         point.positions = [joint_value]
         msg.goal.trajectory.points.append(point)
 
+        # Publish the message
+        self.jointPublisher.publish(msg)
+
+    def teleop_joint_stop_callback(self, msg):
+        joint_state = self.joint_state
+        joint_state = self.joint_state
+
+        msg = FollowJointTrajectoryActionGoal()
+
+        msg.goal.trajectory = JointTrajectory()
+        msg.goal.trajectory.joint_names = ["wrist_extension", "joint_wrist_yaw","joint_lift",
+                                        "joint_gripper_finger_left", "joint_head_pan",
+                                            "joint_head_tilt"]
+
+        point = JointTrajectoryPoint()
+        point.positions = [joint_state.position[joint_state.name.index("wrist_extension")],
+                           joint_state.position[joint_state.name.index("joint_wrist_yaw")],
+                           joint_state.position[joint_state.name.index("joint_lift")],
+                           joint_state.position[joint_state.name.index("joint_gripper_finger_left")],
+                           joint_state.position[joint_state.name.index("joint_head_pan")],
+                           joint_state.position[joint_state.name.index("joint_head_tilt")]]
+        
+        msg.goal.trajectory.points.append(point)
         # Publish the message
         self.jointPublisher.publish(msg)
 

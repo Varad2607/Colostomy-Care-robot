@@ -1,19 +1,14 @@
 <launch>
-
-  <!-- REALSENSE D435i -->
-  <!-- <include file="$(find stretch_core)/launch/d435i_high_resolution.launch"></include>
-  <node name="d435i_configure" pkg="stretch_core" type="d435i_configure" output="screen">
-    <param name="initial_mode" type="string" value="High Accuracy"/>
-  </node> -->
-  <!-- -->
-
+  <param name="file_path" value="$(find colostomy-care)/config" />
+  
   <!-- ARUCO MARKER DETECTOR -->
-  <rosparam command="load" file="$(find stretch_core)/config/stretch_marker_dict.yaml" />
+  <rosparam command="load" file="$(find colostomy-care)/config/stretch_marker_dict.yaml" />
   <node name="detect_aruco_markers" pkg="stretch_core" type="detect_aruco_markers" output="screen"/>
   <!-- -->
 
   <!-- COLOSTOMY CARE -->
   <node name="navigation_node" pkg="colostomy-care" type="navigation.py" output="screen"/>
-  <node name="saved_poses_node" pkg="colostomy-care" type="saved-poses.py" output="screen"/>
+  <node name="saved_poses_node" pkg="colostomy-care" type="saved_poses.py" output="screen"/>
   <node name="teleop_node" pkg="colostomy-care" type="teleop.py" output="screen"/>
+  <node name="aruco_navigation_node" pkg="colostomy-care" type="aruco_navigation.py" output="screen"/>
 </launch>
