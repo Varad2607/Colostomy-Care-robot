@@ -8,6 +8,8 @@ This is the code repo for out Colostomy Care Capstone project for CSE 481C (2023
   - `saved-poses.py`: performed saved poses to align with colostomy bag, remove it, throw it, and stow joints.
   - `navigation.py`: given an initial position, navigate to the patient, and the bin. These positions are currently ard coded, you can adjust the hard coded values after reading the values from /amcl_pose topic (after giving initial pose and navigation goal to the desired position after running the hello robot's navigation.launch).
   - `teleop.py`: allow the controls of the joins and the base of the robot.
+  - `aruco_navigation.py`: handles the navigating to patient and bin
+  - `aruco_navigation_helper.py`: helper node to save/delete robot poses relative to the markers and to navigate to it. Code inspired by [Hello Robot's aruco_navigation feature](https://github.com/hello-robot/stretch_ros/blob/feature/aruco_navigation/hello_helpers/src/hello_helpers/aruco_navigation.py)
 
 For recording new poses: we utilize the `testing/saved-poses-by-demo.py`.
 
