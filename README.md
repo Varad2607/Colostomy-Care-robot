@@ -1,5 +1,5 @@
 # [Colostomy Care](https://sites.google.com/view/colostomy-care-robot/home)
-This is the code repo for out Colostomy Care Capstone project for CSE 481C (2023 Spring), operating on the Stretch-2 robot. The motivation of the project is that often care-giver hesitate to remove bag due to odor isues and it use to create uncomfortable for both patient and care giver.
+This is the code repository for our Colostomy Care Capstone project for CSE 481C (Spring 2023), operating on the Stretch-2 robot. The motivation for the project is that caregivers often hesitate to remove the bag due to odor issues, which creates discomfort for both the patient and the caregiver.
 
 ## Components
 `web-interface/colostomy-care-web-interface.html`: is the main UI for the user to control, it connects to the Stretch Robot IP, this website can be ran on local computer after setting up the ROS_MASTER_URI
